@@ -1,0 +1,37 @@
+<div class="connexion-container">
+	<div class="panel">
+		<div class="logo">
+			<img src="assets/Logo no bg.svg">
+		</div>
+		<div class="divider"></div>
+		<div class="login">
+			<form *ngIf="formConnexion" [formGroup]="formConnexion" (submit)=submit()>
+				<div class="field">
+					<div class="label required">
+						Adresse mail
+					</div>
+					<div class="value">
+						<input matInput formControlName="email" required>
+					</div>
+				</div>
+				<div class="field">
+					<div class="label required">
+						Mot de passe
+					</div>
+					<div class="value">
+						<input matInput type="password" formControlName="password" required>
+					</div>
+				</div>
+				<div *ngIf="patientService.demo; else notDemo" class="sub-text-element stay-connected">Ceci est le mode démonstration, aucune donnée ne sera sauvegardée (l'email et le mot de passe sont fictifs, vous pouvez mettre ce que vous voulez)</div>
+				<ng-template #notDemo>
+					<mat-checkbox disableRipple formControlName="stayConnected">Rester connecté ?</mat-checkbox>
+					<div class="sub-text-element stay-connected">Attention à ne cocher cette case que si vous faites confiance au PC sur lequel vous vous connectez</div>
+				</ng-template>
+				<button [ngClass]="{'disabled':isDisabled(),'loading':loading}" class="button">
+					Se connecter
+					<mat-spinner *ngIf="loading" class="spinner" [diameter]="25"></mat-spinner>
+				</button>
+			</form>
+		</div>
+	</div>
+</div>

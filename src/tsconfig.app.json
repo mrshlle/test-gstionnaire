@@ -1,0 +1,28 @@
+{
+  "extends": "../tsconfig.json",
+  "angularCompilerOptions": {
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "types": []
+  },
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "types": []
+  },
+  "files": [
+    "main.ts",
+    "polyfills.ts",
+    "../node_modules/@types/node/index.d.ts"
+  ],
+  "include": [
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

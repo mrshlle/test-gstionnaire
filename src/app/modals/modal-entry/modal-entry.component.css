@@ -1,0 +1,121 @@
+.input-wrap{
+	position: relative;
+}
+
+.input-wrap .hint{
+	position: absolute;
+	bottom: -15px;
+	right:0;
+	font-size: 12px;
+	color:grey;
+}
+
+::ng-deep .classic .mat-mdc-dialog-container{
+	width:553px;
+	padding:0;
+	position: relative;
+	overflow: hidden;
+	margin:10px;
+	border-radius: 10px;
+	border-top:10px solid #ececec;
+}
+
+.modal-container{
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	padding:24px;
+	min-height:300px;
+}
+
+.modal-container .close{
+	position: absolute;
+	top:5px;
+	right:5px;
+	cursor: pointer;
+}
+
+.modal-container .title{
+	flex:1;
+}
+
+.modal-container .content{
+	flex:2;
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+
+.modal-container .content .field{
+	width: 100%;
+}
+
+.modal-container .content .field .label{
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.modal-container .content .field .value input, .modal-container .content .field .value .mat-mdc-select{
+	width:100%;
+	border:1px solid #ececec;
+	border-radius: 5px;
+	background-color: transparent;
+	padding:10px;
+}
+
+.modal-container .content .field .value .mat-mdc-select{
+	padding:0;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+:host ::ng-deep .modal-container .content .field .value .mat-mdc-select .mat-select-trigger{
+	padding:10px;
+	height:auto;
+}
+
+.modal-container .content .field .value-date{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	border: 1px solid #ececec;
+	border-radius: 5px;
+}
+
+.modal-container .content .field .value-date span{
+	width:90%;
+	position: relative;
+}
+
+.modal-container .content .field .value-date input{
+	border: none;
+	padding:10px;
+	background-color:transparent;
+	width: 100%;
+}
+
+.modal-container .content .field .value-date span:not(:last-child):after{
+	position: absolute;
+	content: '/';
+	right: -9%;
+	bottom: 50%;
+	transform: translateY(50%);
+}
+
+.modal-container .actions{
+	flex:1;
+	display: flex;
+	align-items: flex-end;
+	justify-content:flex-end;
+}
+
+.modal-container .actions .disabled{
+	color:grey;
+	cursor: default;
+}
+
+.modal-container .actions > div{
+	display: inline-block;
+	margin-left: 10px;
+	cursor: pointer;
+}

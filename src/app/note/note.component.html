@@ -1,0 +1,46 @@
+<div [style.--rgbcolor]="patientService.rgbColors[patientService.user.color]" (click)="this.displayNotes = !this.displayNotes" class="opener">
+	<mat-icon>edit_note</mat-icon>
+</div>
+<div [style.--color]="patientService.mainColors[patientService.user.color]" [style.--text-color]="patientService.textColors[patientService.user.color]" class="note-container" [ngClass]="{'show':displayNotes}">
+	<div (click)="addNote()" class="button">Nouvelle note</div>
+	<ng-container *ngIf="notes; else noteNull">
+		<div class="main" *ngIf="notes.length > 0; else noNote">
+			<ng-container *ngFor="let note of notes; let i = index">
+				<div class="panel">
+					<div class="loading" [ngClass]="{'show':loadings[i]}">
+						<mat-spinner *ngIf="!errors[i] && !success[i]" [diameter]="30"></mat-spinner>
+						<div class="error" *ngIf="errors[i]">Une erreur est survenue</div>
+						<div class="success" *ngIf="success[i]">modification appliquée</div>
+					</div>
+					<div class="title">
+						<input #title matInput [readonly]="!edits[i]" [(ngModel)]="note.titre" maxlength="30" placeholder="Titre">
+						<div *ngIf="edits[i]" class="hint">{{title.value.length}} / 30</div>
+					</div>
+					<textarea matInput [readonly]="!edits[i]" [(ngModel)]="note.note" placeholder="Description"></textarea>
+				</div>
+				<div class="buttons">
+					<div *ngIf="edits[i]" (click)="reset(i)" class="button">
+						Annuler
+					</div>
+					<div *ngIf="edits[i]" (click)="edit(i)" class="button">
+						Valider
+					</div>
+					<div *ngIf="!edits[i]" (click)="delete(i)" class="button remove">
+						Supprimer
+					</div>
+					<div *ngIf="!edits[i]" (click)="edit(i)" class="button">
+						Modifier
+					</div>
+				</div>
+			</ng-container>
+		</div>
+		<ng-template #noNote>
+			Vous n'avez aucune note
+		</ng-template>
+	</ng-container>
+	<ng-template #noteNull>
+		<div class="main spinner">
+			<mat-spinner></mat-spinner>
+		</div>
+	</ng-template>
+</div>

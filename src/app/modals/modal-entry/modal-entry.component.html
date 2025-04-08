@@ -1,0 +1,49 @@
+<div class="modal-container">
+	<mat-icon (click)="close()" class="close">close</mat-icon>
+	<div class="title">{{title}}</div>
+	<div class="content">
+		<form [formGroup]="formEntry">
+			<div class="field">
+				<div class="label">
+					Type
+				</div>
+				<div class="value">
+					<mat-select formControlName="type">
+					    <mat-option value="minus">Dépense</mat-option>
+					    <mat-option value="plus">Recette</mat-option>
+					</mat-select>
+				</div>
+			</div>
+			<div class="field">
+				<div class="label">
+					Objet
+				</div>
+				<div class="value">
+					<input formControlName="title">
+				</div>
+			</div>
+			<div class="field">
+				<div class="label">
+					Montant
+				</div>
+				<div class="value">
+					<input (keypress)="numberOnly($event)" formControlName="amount">
+				</div>
+			</div>
+			<div class="field">
+				<div class="label">
+					Date (période : {{minDate | date : 'dd/MM/yyyy'}} - {{today | date : 'dd/MM/yyyy'}})
+				</div>
+				<div formGroupName="date" class="value-date">
+					<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="day"></span>
+					<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="month"></span>
+					<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="maxLength($event,4)" formControlName="year"></span>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="actions">
+		<div (click)="close()">Annuler</div>
+		<div (click)="send()" [ngClass]="{'disabled':disabled()}">Confirmer</div>
+	</div>
+</div>

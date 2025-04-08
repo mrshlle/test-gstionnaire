@@ -1,0 +1,92 @@
+<div [style.--text-color]="patientService.textColors[patientService.user.color]" [style.--color]="patientService.mainColors[patientService.user.color]" class="modification-container">
+	<form *ngIf="survey" [formGroup]="survey">
+		<ng-container formArrayName="sections">
+			<mat-accordion *ngFor="let section of getSections(); let i = index">
+		  		<mat-expansion-panel [formGroupName]="i" [expanded]="i === 0">
+		    		<mat-expansion-panel-header>
+		    			<div *ngIf="i > 0" (click)="removeSection(i)" class="button remove">
+		    				<mat-icon>delete</mat-icon>
+		    			</div>
+		    			<div class="field">
+		    				<div class="label">
+		    					Nom de la section
+		    				</div>
+		    				<div class="value">
+		    					<input matInput (keydown.Space)="$event.stopPropagation()" (click)="$event.stopPropagation()" formControlName="title">
+		    				</div>
+		    			</div>
+		    		</mat-expansion-panel-header>
+		    		<div class="divider"></div>
+		    		<ng-container formArrayName="fields">
+						<div class="question" [formGroupName]="j" *ngFor="let question of getQuestions(section); let j = index">
+							<div class="fields-wrapper">
+								<div class="field">
+									<div class="label">
+										Intitulé de la question
+									</div>
+									<div class="value">
+										<input matInput formControlName="entitled">
+									</div>
+								</div>
+								<div class="field">
+									<div class="label">
+										Type de la question
+									</div>
+									<div class="value">
+										<ng-container *ngIf="question.status === 'DISABLED'; else notDisabled">
+											Question non modifiable
+										</ng-container>
+										<ng-template #notDisabled>
+											<mat-select class="select" placeholder="Type de la question" (selectionChange)="onChange($event,question)" formControlName="questionType">  
+					                        	<mat-option>-</mat-option>
+						                        <mat-option value="text">Texte simple</mat-option>
+												<mat-option value="textarea">Zone de texte</mat-option>
+												<mat-option value="select">Selection</mat-option>
+												<mat-option value="date">Date</mat-option>
+												<mat-option value="checkbox">Case à cocher (plusieurs choix possibles)</mat-option>
+												<mat-option value="radio">Bouton à cocher (un seul choix possible)</mat-option>
+												<mat-option *ngIf="files && !demo" value="file">Ajout de fichiers (5 fichiers max, 2MB max/fichier)</mat-option>
+						                    </mat-select>
+										</ng-template>
+									</div>
+								</div>
+								<div *ngIf="question.status !== 'DISABLED'" (click)="removeQuestion(i,j)" class="button remove">
+									<mat-icon>delete</mat-icon>
+								</div>
+							</div>
+							<div class="chips-wrapper" *ngIf="matChip(question)">
+								<mat-chip-grid 
+									#chipList
+									class="chip-list"
+								>
+									<mat-chip-row 
+										*ngFor="let option of getOptions(question); let k = index"
+										[removable]="true" 
+										(removed)="removeOption(question, k)"
+									>
+										{{option.value}}
+										<mat-icon matChipRemove>cancel</mat-icon>
+									</mat-chip-row>
+									<input 
+										placeholder="Pour ajouter une option, écrire l'option ici, puis appuyer sur entrée."
+										[matChipInputFor]="chipList"
+										[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+										(matChipInputTokenEnd)="addOption($event, question)"
+									>
+								</mat-chip-grid>
+							</div>
+						</div>
+					</ng-container>
+					<div (click)="addQuestion(section)" class="button add">Ajouter une question</div>
+		    	</mat-expansion-panel>
+		    </mat-accordion>
+		</ng-container>
+	</form>
+	<div class="button save" (click)="saveInterro()">Enregistrer</div>
+	<div class="button add" (click)="addSection()">Ajouter une section</div>
+	<div class="loading" [ngClass]="{'show':loading}">
+		<mat-spinner *ngIf="!error && !success" [diameter]="50"></mat-spinner>
+		<div *ngIf="error">Une erreur est survenue</div>
+		<div *ngIf="success">Formulaire sauvegardé</div>
+	</div>
+</div>

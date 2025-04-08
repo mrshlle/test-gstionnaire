@@ -1,0 +1,382 @@
+.dashboard-container{
+	position: relative;
+	--color:red;
+	--text-color:red;
+	--fade-color:red;
+	--sup-color:red;
+}
+
+.dashboard-container .panel{
+	border-bottom: none;
+}
+
+.dashboard-container .title-text:after{
+	background-color: var(--color);
+}
+
+.dashboard-container .button{
+	background-color: var(--color);
+	color:var(--text-color);
+}
+
+.dashboard-container .button.disabled{
+	background-color: #ececec;
+	color:#cecece;
+	cursor: initial;
+}
+
+.dashboard-container .date{
+	background-color: var(--color);
+	color: var(--text-color);
+	display: flex;
+}
+
+.dashboard-container .date > div{
+	flex:1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dashboard-container .date .clock {
+	height: 200px;
+	width: 200px;
+	background: white;
+	border-radius: 100%;
+	border: 5px solid var(--sup-color);
+	position: relative;
+	box-shadow:0 5px 5px #0003;
+}
+
+.dashboard-container .date .clock .hour {
+	--percent-hour: 0;
+    width: 3px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: rotate(calc(360deg*var(--percent-hour)/100));
+}
+
+.dashboard-container .date .clock .hour:before {
+	position: absolute;
+	content: "";
+	background: #262626;
+	height: 40px;
+	width: 3px;
+	top: 55px;
+	border-radius: 10px;
+}
+
+.dashboard-container .date .clock .minute {
+	--percent-minute:0;
+    width: 3px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: rotate(calc(360deg*var(--percent-minute)/100));
+}
+
+.dashboard-container .date .clock .minute:before {
+	position: absolute;
+	content: "";
+	background: #262626;
+	height: 60px;
+	width: 3px;
+	top: 35px;
+	border-radius: 10px;
+}
+
+.dashboard-container .widgets{
+	display: grid;
+	grid-template-columns: repeat(2,1fr);
+	grid-gap: 20px;
+}
+
+.dashboard-container .widgets .cdk-drop-list{
+  	display: flex;
+}
+
+.dashboard-container .widgets .cdk-drag-placeholder {
+	background-color: #ececec;
+}
+
+.dashboard-container .widgets .inactive{
+	display: none;
+}
+
+.dashboard-container .widgets .inactive.edit{
+	display: flex;
+}
+
+.dashboard-container .widgets .widget.cdk-drag-disabled {
+	cursor: default;
+}
+
+.dashboard-container .widgets .widget{
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap:20px;
+	min-width: calc(50% - 10px)
+}
+
+.drag-layout{
+	position: absolute;
+	top:0;
+	left:0;
+	right: 0;
+	bottom: 0;
+	z-index: 10;
+	cursor: move;
+}
+
+.drag-layout .background{
+	position: absolute;
+	top:0;
+	left:0;
+	right: 0;
+	bottom: 0;
+	background-color: white;
+	opacity: 0.2;
+	filter:blur(2px);
+	z-index: 11;
+	cursor: move;
+}
+
+.dashboard-container .widgets .inactive.edit .drag-layout .background{
+	opacity: 0.8;
+}
+
+.drag-layout .visibility{
+	position: absolute;
+	top:10px;
+	right:10px;
+	z-index: 12;
+	cursor: pointer;
+}
+
+.drag-layout .drag-indicator{
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+	height: 50px;
+	width: 50px;
+	font-size:50px;
+	z-index: 12;
+	cursor: move;
+	color:#5e5e5e;
+}
+
+.content{
+	flex:1;
+}
+
+.content .items{
+	display: flex;
+	gap:20px;
+}
+
+.content .items .item{
+	flex:1;
+	text-align: center;
+}
+
+.chart{
+	flex:1;
+	display: grid;
+	grid-template-columns: repeat(12,1fr);
+	margin-top: 20px;
+}
+
+.chart .bar-wrapper{
+	height: 150px;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+}
+
+.chart .bar-wrapper .bar{
+	width:70%;
+	background-color: var(--fade-color);
+	transition:height 0.5s;
+	min-height: 10px;
+	border-radius: 10px;
+}
+
+.chart .bar-wrapper .bar:hover{
+	background: linear-gradient(var(--color) 0%, var(--sup-color) 100%);
+}
+
+.chart .month{
+	text-align: center;
+}
+
+.buttons{
+	display: flex;
+	gap:10px;
+}
+
+.area-chart {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 90%;
+	height: 150px;
+	margin:auto;
+}
+.area-chart tbody {
+	width: 100%;
+	height: 150px;
+	display: flex;
+	justify-content: stretch;
+	align-items: stretch;
+	flex-direction: row;
+}
+.area-chart tr {
+	position: relative;
+	flex:1;
+}
+.area-chart td {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: var(--color-chart);
+	transition: clip-path 0.5s;
+	clip-path: polygon(
+		0% calc(100% * (1 - var(--start)/100)),
+		100% calc(100% * (1 - var(--end)/100)),
+		100% 100%,
+		0% 100%
+	);
+}
+.area-chart td:nth-of-type(1) {
+	--color-chart: #00000030;
+}
+.area-chart td:nth-of-type(2) {
+	--color-chart: #00000038;
+}
+
+.sub-title-element.records{
+	color:#00000096;
+}
+
+.sub-title-element.consultations{
+	color:#00000030;
+}
+
+.months{
+	width: 90%;
+	margin:auto;
+	display: grid;
+	grid-template-columns: repeat(11,1fr);
+}
+
+.months .month div{
+	width: max-content;
+	transform: translateX(-50%);
+}
+
+.months .month:last-child{
+	display: none;
+}
+
+.months .month:nth-child(11){
+	position: relative;
+}
+
+.months .month:nth-child(11):after{
+	position: absolute;
+	content:'Déc.';
+	right:0;
+	top: 0;
+	transform: translateX(50%);
+}
+
+.month{
+	margin-top: 5px;
+}
+
+.mini{
+	display: none;
+}
+
+@media screen and (max-width: 1300px){
+	.semi{
+		display: none;
+	}
+
+	.mini{
+		display: block;
+	}
+
+	.months.mini{
+		display: grid;
+	}
+
+	.months.mini .month:nth-child(11):after{
+		content:'D';
+	}
+}
+
+@media screen and (max-width: 1000px){
+	.dashboard-container .date .clock {
+		height: 180px;
+		width: 180px;
+	}
+
+	.dashboard-container .date .clock .hour:before {
+		height: 35px;
+		top: 50px;
+	}
+
+	.dashboard-container .date .clock .minute:before {
+		height: 55px;
+		top: 30px;
+	}
+}
+
+@media screen and (max-width: 850px){
+	.dashboard-container .widgets{
+		grid-template-columns: repeat(1,1fr);
+		grid-gap: 0;
+	}
+}
+
+@media screen and (max-width: 650px){
+	.dashboard-container .container-title{
+		flex-direction:column;
+	}
+
+	.dashboard-container .date .clock {
+		height: 150px;
+		width: 150px;
+	}
+
+	.dashboard-container .date .clock .hour:before {
+		height: 28px;
+		top: 43px;
+	}
+
+	.dashboard-container .date .clock .minute:before {
+		height: 48px;
+		top: 23px;
+	}
+}
+
+@media screen and (max-width:550px){
+	.dashboard-container .date{
+		flex-direction: column;
+	}
+
+	.dashboard-container .date .clock-element {
+		margin-top:30px;
+		margin-bottom: 30px;
+	}
+}

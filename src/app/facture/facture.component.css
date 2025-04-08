@@ -1,0 +1,367 @@
+.invoice-container{
+	position: relative;
+	--color:red;
+	--fade-color:red;
+	--sup-color:red;
+	--text-color:red;
+}
+
+.invoice-container .container-title .title-text:after{
+	background-color: var(--color);
+}
+
+.invoice-container .button{
+	background-color: var(--color);
+	color:var(--text-color);
+}
+
+.invoice-container .search-container .search-header{
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.invoice-container .search-container .criteria{
+	display: grid;
+	grid-template-columns: repeat(2,1fr);
+	grid-column-gap:15px;
+}
+
+.invoice-container .search-container .criteria .label{
+	color:#868686;
+	margin-bottom: 5px;
+}
+
+.invoice-container .search-container .criteria .value input{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:100%;
+	padding: 10px;
+}
+
+.invoice-container .panel .no-elements{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color:#868686;
+}
+
+.invoice-container .panel .no-elements .button{
+	background-color: var(--color);
+	color:var(--text-color);
+	margin-top:10px;
+}
+
+.invoice-container .panel .animated-background{
+	height: 180px;
+}
+
+.invoice-container .panel .animated-background .background-masker.first{
+	width: calc(80% - 20px);
+	left:20%;
+}
+
+.invoice-container .panel .animated-background .background-masker.second{
+	width: 100%;
+	top:20px;
+}
+
+.invoice-container .panel .animated-background .background-masker.third{
+	top:40px;
+	width:10%;
+}
+
+.invoice-container .panel .animated-background .background-masker.fourth{
+	top:40px;
+	left:calc(10% + 20px);
+	width:20px;
+}
+
+.invoice-container .panel .animated-background .background-masker.fifth{
+	top:40px;
+	left:50%;
+	width: 50%
+}
+
+.invoice-container .panel .animated-background .background-masker.sixth{
+	top:60px;
+	width: 100%;
+}
+
+.invoice-container .panel .animated-background .background-masker.seventh{
+	top:80px;
+	width:10%;
+}
+
+.invoice-container .panel .animated-background .background-masker.eighth{
+	top:80px;
+	left:calc(10% + 20px);
+	width:20px;
+}
+
+.invoice-container .panel .animated-background .background-masker.nineth{
+	top:80px;
+	left:40%;
+	width:60%;
+}
+
+.invoice-container .panel .animated-background .background-masker.tenth{
+	top:100px;
+	width: 100%;
+}
+
+.invoice-container .panel .animated-background .background-masker.eleventh{
+	top:120px;
+	left:25%;
+	width: calc(75% - 20px);
+}
+
+.invoice-container .panel .animated-background .background-masker.twelveth{
+	top:140px;
+	width: 100%;
+}
+
+.invoice-container .panel .animated-background .background-masker.thirteenth{
+	top:160px;
+	width: 10%;
+}
+
+.invoice-container .panel .animated-background .background-masker.fourteenth{
+	top:160px;
+	left:calc(10% + 20px);
+	width: 20px;
+}
+
+.invoice-container .panel .animated-background .background-masker.fifteenth{
+	top:160px;
+	left:45%;
+	width: 55%;
+}
+
+.invoice-container .mat-accordion{
+	margin-top: 20px;
+	box-shadow: 10px 10px 10px 0px rgba(200,200,200,0.1);
+	border-bottom: 2px solid var(--fade-color);
+	border-radius: 10px;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel:not([class*="mat-elevation-z"]){
+	box-shadow: none;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel{
+	border-radius: 0;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel:first-child{
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel:last-child{
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel-spacing{
+	margin:0;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled="true"]){
+	background-color: white;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel .mat-mdc-list-item{
+	font-size: 15px;
+	cursor: pointer;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel .mat-mdc-list-item:hover{
+	background-color: #fbfbfb;
+}
+
+.invoice-container .mat-accordion .mat-expansion-panel .mat-mdc-list-item .mat-mdc-list-item-icon{
+	width: 20px;
+	height: 20px;
+	font-size: 20px;
+	margin-right: 15px;
+}
+
+.invoice-container .back.button{
+	margin-top: 20px;
+}
+
+.invoice-container .back.button mat-icon{
+	margin-right: 5px;
+}
+
+.invoice-container .invoice.panel{
+	position: relative;
+}
+
+.invoice-container .invoice.panel .blur{
+	filter:blur(2px);
+}
+
+.invoice-container .invoice.panel .loading-panel{
+	position: absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+
+.invoice-container .invoice.panel .loading-panel{
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+}
+
+.invoice-container .invoice.panel .loading-panel .error{
+	color:#df0000;
+}
+
+.invoice-container .invoice.panel .loading-panel .success{
+	color:#00df00;
+}
+
+.invoice-container .invoice.panel .loading-panel .spinner{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+:host ::ng-deep .invoice-container .invoice.panel .loading-panel .spinner .mat-mdc-progress-spinner circle{
+	stroke:var(--color);
+}
+
+.invoice-container .invoice.panel .title{
+	text-align: center;
+}
+
+.invoice-container .invoice.panel .divider{
+	height: 2px;
+	background-color: #ececec;
+	margin:20px;
+}
+
+.invoice-container .invoice.panel .stamp{
+	height: 150px;
+	text-align: center;
+	line-height: 150px;
+	background: linear-gradient(170deg, #f0f0f0 60%, #f7f7f7 62%);
+	border-radius: 5px;
+	box-shadow: 10px 10px 10px 0px rgba(200,200,200,0.1);
+}
+
+.invoice-container .invoice.panel .mat-mdc-select, .invoice-container .invoice.panel input{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:100%;
+	margin-top: 10px;
+}
+
+.invoice-container .invoice.panel .receiver .birthdate{
+	margin-top: 10px;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+:host ::ng-deep .invoice-container .invoice.panel .mat-mdc-select .mat-select-trigger{
+	padding:10px;
+	height:auto;
+}
+
+.invoice-container .invoice.panel input{
+	padding:10px;
+	margin:0;
+}
+
+.invoice-container .invoice.panel .select{
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.invoice-container .invoice.panel .details .row{
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	column-gap: 10px;
+	padding: 10px;
+}
+
+.invoice-container .invoice.panel .details .header{
+	background-color: #f4f4f4;
+}
+
+.invoice-container .invoice.panel .details .values > div{
+	display: flex;
+	align-items: center;
+}
+
+.invoice-container .invoice.panel .details .values .input-wrap{
+	position: relative;
+	display: inline-block;
+}
+
+.invoice-container .invoice.panel .details .values .input-wrap .hint{
+	position: absolute;
+	right:0;
+	bottom:-15px;
+	font-size: 12px;
+	color:grey;
+}
+
+.invoice-container .invoice.panel .details .values .no-patient{
+	color:grey;
+}
+
+.invoice-container .button-wrapper{
+	display: flex;
+	margin-top: 20px;
+}
+
+.invoice-container .button-wrapper.end{
+	justify-content: flex-end;
+}
+
+.invoice-container .button-wrapper.space{
+	flex-wrap: wrap;
+	gap:20px;
+}
+
+.invoice-container .button-wrapper.space > div{
+	flex:1;
+	justify-content: center;
+}
+
+.invoice-container .button-wrapper .button{
+	padding:15px;
+}
+
+.invoice-container .button-wrapper .button.disabled{
+	background-color: #ececec;
+	color:#cecece;
+	cursor: default;
+}
+
+@media screen and (max-width:1000px){
+	.invoice-container .mat-accordion .mat-expansion-panel .mat-mdc-list-item{
+		font-size: 14px;
+	}
+}
+
+@media screen and (max-width:850px){
+	.invoice-container .mat-accordion .mat-expansion-panel .mat-mdc-list-item{
+		font-size: 13px;
+	}
+}
+
+@media screen and (max-width:650px){
+	.invoice-container .mat-accordion .mat-expansion-panel .mat-mdc-list-item{
+		font-size: 12px;
+	}
+}

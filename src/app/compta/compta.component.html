@@ -1,0 +1,175 @@
+<div [style.--color]="patientService.mainColors[patientService.user.color]" [style.--sup-color]="patientService.supColors[patientService.user.color]" [style.--fade-color]="patientService.svgColors[patientService.user.color]" [style.--text-color]="patientService.textColors[patientService.user.color]" class="accountancy-container container">
+	<div class="container-title">
+		<div class="title-text title-element">
+			Comptabilité simplifiée
+		</div>
+	</div>
+	<div class="chart-container panel">
+		<div class="year sub-title-element">
+			<mat-icon [ngClass]="{'arrow':true,'disabled':disabledLeft}" (click)="prevYear()">chevron_left</mat-icon>
+			<div class="text">{{currentShownYear}}</div>
+			<mat-icon [ngClass]="{'arrow':true,'disabled':disabledRight}" (click)="nextYear()">chevron_right</mat-icon>
+		</div>
+		<div class="info">
+			<div class="income">
+				<div class="sub-title-element">
+					Chiffre d'affaire
+				</div>
+				<div class="amount" *ngIf="actualMonth; else wait">
+					{{currentYearTotal}}€
+				</div>
+				<ng-template #wait>
+					<div class="waiting">
+						<div class="animated-background"></div><div>€</div>
+					</div>
+				</ng-template>
+			</div>
+			<div class="divider"></div>
+			<div class="chart">
+				<div class="bar-wrapper" *ngFor="let month of monthsName; let i = index">
+					<div [ngClass]="{'bar':true,'active':actualIndex === i,'disabled':(shownMonths.length > 0 ? shownMonths[i].disabled : true)}" (click)="showDetails(i)" [style.height.%]="shownMonths.length > 0 ? ((shownMonths[i].consultations | sum : 0 : espece : cheque : credit : conslt : entry : false) | percent : currentYearMax) : 0"></div>
+				</div>
+				<div [ngClass]="{'month':true,'active':actualIndex === i}" *ngFor="let month of monthsName">{{month}}</div>
+			</div>
+		</div>
+	</div>
+	<ng-container *ngIf="actualMonth; else waitPanel">
+		<div class="sub-title-element">
+			Détails pour <b>{{monthsName[actualIndex]}} {{currentShownYear}}</b>
+		</div>
+		<div class="details-header">
+			<div class="turnover">
+				CA : <span> {{shownConsultations | sum : 0 : espece : cheque : credit : conslt : entry : false}}</span>€
+			</div>
+			<div class="fee-wrapper">
+				<div [ngClass]="{'fee':true,'error':error,'success':success}">
+					Charges (%) : <input [ngClass]="{'disabled':disabledFee}" matInput [disabled]="disabledFee" (keypress)="numberOnly($event)" [(ngModel)]="actualFee">
+				</div>
+				<div [ngClass]="{'loading':true,'show':loading}">
+					<mat-spinner *ngIf="!error && !success" [diameter]="30"></mat-spinner>
+					<div *ngIf="error">Problème d'enregistrement</div>
+					<div *ngIf="success">Modification enregistrée</div>
+				</div>
+				<div *ngIf="disabledFee; else updateFee" (click)="changeFee()" [ngClass]="{'disabled':loading}" class="button">
+					Modifier
+				</div>
+				<ng-template #updateFee>
+					<div (click)="changeFee()" [ngClass]="{'disabled':loading}" class="button update">
+						Confirmer
+					</div>
+					<div (click)="cancel()" [ngClass]="{'disabled':loading}" class="button update">
+						Annuler
+					</div>
+				</ng-template>
+			</div>
+			<div class="benefit">
+				Bénéfices : <span> {{(shownConsultations | sum : actualFee : espece : cheque : credit : conslt : entry : true) | number : '1.0-2'}}</span>€<br>
+			</div>
+		</div>
+		<div class="consultations panel">
+			<div class="buttons">
+				<div (click)="addEntry()" class="button">
+					Nouvelle entrée
+				</div>
+				<div (click)="downloadCSV()" class="button">
+					Exporter au format CSV
+				</div>
+			</div>
+			<div (click)="expandFilter()" class="text sub-title-element" [ngClass]="{'show':expand}">
+				Filtrer les entrées <mat-icon>expand_more</mat-icon>
+			</div>
+			<div [ngClass]="{'checkboxes':true,'show':expand}">
+				Origine
+				<div class="flexboxes">
+					<div (click)="conslt = !conslt" [ngClass]="{'checkbox':true,'active':conslt}">
+						<mat-checkbox disabled [ngModel]="conslt"></mat-checkbox><div>Consultations</div><div>{{(shownConsultations | origin : 'consultation').length}}</div>
+					</div>
+					<div (click)="entry = !entry" [ngClass]="{'checkbox':true,'active':entry}">
+						<mat-checkbox disabled [ngModel]="entry"></mat-checkbox><div>Divers</div><div>{{(shownConsultations | origin : 'entry').length}}</div>
+					</div>
+				</div>
+				Type de paiement (Consultation)
+				<div class="flexboxes">
+					<div (click)="credit = !credit" [ngClass]="{'checkbox':true,'active':credit}">
+						<mat-checkbox disabled [ngModel]="credit"></mat-checkbox><div>Carte bancaire</div><div>{{(shownConsultations | payment : 'Carte bancaire').length}}</div>
+					</div>
+					<div (click)="cheque = !cheque" [ngClass]="{'checkbox':true,'active':cheque}">
+						<mat-checkbox disabled [ngModel]="cheque"></mat-checkbox><div>Chèque</div><div>{{(shownConsultations | payment : 'Chèque').length}}</div>
+					</div>
+					<div (click)="espece = !espece" [ngClass]="{'checkbox':true,'active':espece}">
+						<mat-checkbox disabled [ngModel]="espece"></mat-checkbox><div>Espèce</div><div>{{(shownConsultations | payment : 'Espèce').length}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-consultations">
+				<ng-container *ngIf="shownConsultations.length > 0; else noConsultation">
+					<div *ngFor="let element of shownElements; let i = index" class="element">
+						<div class="divider"></div>
+						<div class="element-date">{{element.date}}</div>
+						<div *ngFor="let value of element.values; let j = index" [ngClass]="{'not':(value.reglement === 'Espèce' && !espece) || (value.reglement === 'Carte bancaire' && !credit) || (value.reglement === 'Chèque' && !cheque) || (value.origin === 'consultation' && !conslt) || (value.origin === 'entry' && !entry)}" class="element-value">
+							<div>
+								<ng-container *ngIf="value.origin === 'consultation'; else entryTitle">Consultation</ng-container>
+								<ng-template #entryTitle>{{value.title}}</ng-template>
+							</div>
+							<div>
+								<ng-container *ngIf="value.origin === 'consultation'">+ {{value.total}} €</ng-container>
+								<ng-container *ngIf="value.origin === 'entry' && value.type === 'plus'">+ {{value.amount}} €</ng-container>
+								<ng-container *ngIf="value.origin === 'entry' && value.type === 'minus'">- {{value.amount}} €</ng-container>
+							</div>
+							<div>
+								<ng-container *ngIf="value.origin === 'entry'">
+									<div class="more-element">
+										<mat-icon (click)="toggleMenu(i,j)">more_vert</mat-icon>
+										<div class="panel more-menu" [ngClass]="{'show':moreMenu[i][j]}">
+											<div (click)="updateEntry(value,i,j)">Modifier</div>
+											<div (click)="deleteEntry(value,i,j)">Supprimer</div>
+										</div>
+										<div class="more-overlay" *ngIf="moreMenu[i][j]" (click)="toggleMenu(i,j)"></div>
+									</div>
+								</ng-container>
+							</div>
+						</div>
+					</div>
+				</ng-container>
+				<ng-template #noConsultation>
+					<div class="no-elements">
+						Vous n'avez pas d'entrée pour ce mois
+					</div>
+				</ng-template>
+			</div>
+			<div class="loading" [ngClass]="{'show':loadingEntry}">
+				<mat-spinner *ngIf="!errorEntry && !successEntry" [diameter]="50"></mat-spinner>
+				<div *ngIf="errorEntry">Une erreur est survenue</div>
+				<div *ngIf="successEntry">Modification prise en compte</div>
+			</div>
+		</div>
+	</ng-container>
+	<ng-template #waitPanel>
+		<div class="title-details animated-background"></div>
+		<div class="details-header">
+			<div class="turnover">
+				<div class="animated-background"></div>
+			</div>
+			<div class="fee-wrapper">
+				<div class="animated-background"></div>
+			</div>
+			<div class="benefit">
+				<div class="animated-background"></div>
+			</div>
+		</div>
+		<div class="consultations panel waiting">
+			<div class="animated-background">
+				<div class="background-masker first"></div>
+				<div class="background-masker second"></div>
+				<div class="background-masker third"></div>
+				<div class="background-masker fourth"></div>
+				<div class="background-masker fifth"></div>
+				<div class="background-masker sixth"></div>
+				<div class="background-masker seventh"></div>
+				<div class="background-masker eighth"></div>
+				<div class="background-masker nineth"></div>
+				<div class="background-masker tenth"></div>
+			</div>
+		</div>
+	</ng-template>
+</div>

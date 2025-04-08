@@ -1,0 +1,15 @@
+<div class="modal-container">
+	<mat-icon (click)="close()" class="close">close</mat-icon>
+	<div class="title">Modification d'évènement récurrent</div>
+	<div class="content">
+		<mat-radio-group [(ngModel)]="update">
+			<mat-radio-button value="0">Cet évènement uniquement</mat-radio-button>
+			<mat-radio-button value="1">Tous les évènements</mat-radio-button>
+			<!-- <mat-radio-button value="2" disabled>Cet évènement et les suivants</mat-radio-button> -->
+		</mat-radio-group>
+	</div>
+	<div class="actions">
+		<div (click)="close()">Annuler</div>
+		<div (click)="confirmAndClose()">Confirmer</div>
+	</div>
+</div>

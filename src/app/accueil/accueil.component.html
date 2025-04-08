@@ -1,0 +1,345 @@
+<div [style.--color]="patientService.mainColors[patientService.user.color]" [style.--sup-color]="patientService.supColors[patientService.user.color]" [style.--fade-color]="patientService.svgColors[patientService.user.color]" [style.--text-color]="patientService.textColors[patientService.user.color]" [style.--sub-color]="patientService.subColors[patientService.user.color]" class="home-container container">
+	<div id="shown-event-element" *ngIf="shownEvent" [ngClass]="{'show':shownEvent}" class="shown-event" [style.--clientX]="shownEvent.clientX" [style.--clientY]="shownEvent.clientY">
+		<div id="sub-shown-event-element" class="header">
+			<mat-icon id="sub-shown-event-element" *ngIf="shownEvent.id_patient && shownEvent.pid_patient" (click)="showLink(shownEvent)">person</mat-icon>
+			<mat-icon id="sub-shown-event-element" (click)="delEvent(shownEvent)">delete</mat-icon>
+			<mat-icon id="sub-shown-event-element" (click)="showEvent(shownEvent)">edit</mat-icon>
+			<mat-icon id="sub-shown-event-element" (click)="cancelPreview()">close</mat-icon>
+		</div>
+		<div id="sub-shown-event-element" class="title">
+			{{shownEvent.titre}} <ng-container *ngIf="shownEvent.id_patient && shownEvent.pid_patient">(lié à {{shownEvent.record.nom}} {{shownEvent.record.prenom}})</ng-container>
+		</div>
+		<div id="sub-shown-event-element" class="event-hours">
+			<ng-container *ngIf="shownEvent.type === 1; else notMultiple">
+				{{shownEvent.date_debut | date : 'dd/MM/yyyy'}} - {{shownEvent.end_date | date : 'dd/MM/yyyy'}}
+			</ng-container>
+			<ng-template #notMultiple>
+				{{shownEvent.heure_debut}} - {{shownEvent.heure_fin}}
+			</ng-template>
+		</div>
+		<div id="sub-shown-event-element" class="note">
+			{{shownEvent.note}}
+		</div>
+	</div>
+	<div class="container-title">
+		<div class="title-text title-element">
+			Agenda
+		</div>
+	</div>
+	<div class="panel">
+		<div [ngClass]="{'show':newEvent}" class="new-event">
+			<form *ngIf="formEvent" [formGroup]="formEvent">
+				<div *ngIf="loading" class="loading-panel">
+					<div class="title-element error" *ngIf="error">Une erreur est survenue, merci de réessayer</div>
+					<div class="title-element spinner" *ngIf="!error && !success">
+						<mat-spinner [diameter]="50"></mat-spinner>
+						<ng-container *ngIf="updateEventElement; else createSpinner">
+		    				Modification de l'évènement
+		    			</ng-container>
+		    			<ng-template #createSpinner>
+		    				Ajout de l'évènement
+		    			</ng-template>
+					</div>
+				</div> 
+				<div [ngClass]="{'blur':loading}">
+					<div class="title">
+						<div class="sub-title-element">
+							<ng-container *ngIf="updateEventElement; else createHeader">
+			    				Modification d'évènement
+			    			</ng-container>
+			    			<ng-template #createHeader>
+			    				Ajout d'évènement
+			    			</ng-template>
+			    		</div>
+			    		<div class="buttons">
+				    		<ng-container *ngIf="updateEventElement; else create">
+								<div (click)="updateEventValue()" [ngClass]="{'disabled':!formEvent.valid || !formEvent.dirty || loading}" class="button">
+									Modifier l'évènement
+								</div>
+				    			<div (click)="cancelEvent()" class="button">
+				    				Annuler
+				    			</div>
+							</ng-container>
+							<ng-template #create>
+								<div (click)="createEvent()" [ngClass]="{'disabled':loading || disabled}" [ngClass]="{'disabled':!formEvent.valid || loading}" class="button">
+									Créer l'évènement
+								</div>
+								<div (click)="cancelEvent()" class="button">
+				    				Annuler
+				    			</div>
+							</ng-template>
+						</div>
+					</div>
+		    		<div class="divider"></div>
+		    		<div class="body">
+		    			<div class="field">
+		    				<div class="label">
+		    					Lier une fiche
+		    				</div>
+		    				<div class="record value">
+		    					<mat-select (selectionChange)="onChange($event)" formControlName="patient">
+									<mat-option [disabled]="true">
+										<input matInput placeholder="Chercher" (keydown)="$event.stopPropagation()" [(ngModel)]="namePatient" [ngModelOptions]="{standalone: true}">
+									</mat-option>
+									<ng-container *ngIf="patients; else waitPatients">
+										<mat-option *ngFor="let patient of patients | filterpatient : namePatient" value="{{patient.id_patient}}">
+											{{patient.nom}} {{patient.prenom}}
+										</mat-option>
+									</ng-container>
+									<ng-template #waitPatients>
+										<div class="wait-information">
+											Récupération des fiches...
+										</div>
+									</ng-template>	
+								</mat-select>
+								<mat-icon [ngClass]="{'cursor':true,'disabled':disableRemove}" (click)="removePatient()">close</mat-icon>
+		    				</div>
+		    			</div>
+		    			<div class="field">
+		    				<div class="label required">
+		    					Intitulé
+		    				</div>
+		    				<div class="value wrapper">
+	    						<input #intitule matInput maxlength="35" formControlName="entitled">
+								<div class="hint">{{intitule.value.length}} / 35</div>
+		    				</div>
+		    			</div>
+		    			<div class="double-field">
+			    			<div class="field">
+			    				<div class="label required">
+			    					Date début
+			    				</div>
+			    				<div class="date-value" formGroupName="date">
+			    					<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="nextInput($event)" formControlName="day"></span>
+									<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="nextInput($event)" formControlName="month"></span>
+									<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="maxLength($event,4)" formControlName="year"></span>
+			    				</div>
+			    			</div>
+			    			<div class="field">
+			    				<div class="label required">
+			    					Date fin
+			    				</div>
+			    				<div class="date-value" formGroupName="end_date">
+			    					<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="nextInput($event)" formControlName="day"></span>
+									<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="nextInput($event)" formControlName="month"></span>
+									<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="maxLength($event,4)" formControlName="year"></span>
+			    				</div>
+			    			</div>
+			    		</div>
+		    			<div class="double-field">
+		    				<div class="field">
+			    				<div class="label required">
+			    					Heure début
+			    				</div>
+			    				<div class="value">
+			    					<mat-select (selectionChange)="hourTrigger($event.value)" formControlName="start">
+										<mat-option *ngFor="let hour of heures" value="{{hour}}">{{hour}}</mat-option>
+									</mat-select>
+			    				</div>
+			    			</div>
+			    			<div class="field">
+			    				<div class="label required">
+			    					Heure fin
+			    				</div>
+			    				<div class="value">
+			    					<mat-select formControlName="end">
+										<mat-option *ngFor="let hour of heuresFin" value="{{hour}}">{{hour}}</mat-option>
+									</mat-select>
+			    				</div>
+			    			</div>
+		    			</div>
+		    			<div class="field">
+		    				<div class="label">
+		    					Description
+		    				</div>
+		    				<div class="value">
+		    					<textarea matInput formControlName="description"></textarea>
+		    				</div>
+		    			</div>
+		    			<div class="field">
+		    				<div class="value">
+		    					<mat-checkbox (change)="toggleRecurrence($event)" formControlName="recurrence">Récurrence</mat-checkbox>
+		    				</div>
+		    			</div>
+		    			<div class="double-field">
+		    				<div class="field">
+			    				<div class="label" [ngClass]="{'required':recurrence}">
+			    					Tous les
+			    				</div>
+			    				<div class="value">
+			    					<input matInput (keypress)="numberOnly($event)" formControlName="repeat_number">
+			    				</div>
+			    			</div>
+			    			<div class="field">
+			    				<div class="label transparent" [ngClass]="{'required':recurrence}">
+			    					.
+			    				</div>
+			    				<div class="value">
+			    					<mat-select formControlName="repeat_period">
+										<mat-option value="0">Jour</mat-option>
+										<mat-option value="1">Semaine</mat-option>
+										<mat-option value="2">Mois</mat-option>
+										<mat-option value="3">Année</mat-option>
+									</mat-select>
+			    				</div>
+			    			</div>
+			    		</div>
+			    		<div class="double-field">
+				    		<div class="field">
+				    			<div class="label" [ngClass]="{'required':recurrence}">
+				    				Se termine
+				    			</div>
+				    			<div class="value">
+				    				<mat-select (selectionChange)="updateRecurrence($event)" formControlName="end_recurrence">
+				    					<mat-option value="0">Jamais</mat-option>
+				    					<mat-option value="1">Le</mat-option>
+				    					<mat-option value="2">Après</mat-option>
+				    				</mat-select>
+				    			</div>
+				    		</div>
+				    		<div class="field">
+				    			<div class="label" [ngClass]="{'required':recurrence && (ending === '1' || ending === '2')}">
+				    				<ng-container *ngIf="ending === '1'">Date de fin</ng-container>
+				    				<ng-container *ngIf="ending === '2'">Nombre d'occurrences</ng-container>
+				    			</div>
+				    			<div *ngIf="ending === '1'" class="date-value" formGroupName="value_date">
+			    					<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="nextInput($event)" formControlName="day"></span>
+									<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="nextInput($event)" formControlName="month"></span>
+									<span><input matInput #dateInput (keypress)="numberOnly($event)" (input)="maxLength($event,4)" formControlName="year"></span>
+			    				</div>
+				    			<div *ngIf="ending === '2'" class="value">
+				    				<input matInput (keypress)="numberOnly($event)" formControlName="occurrence">
+				    			</div>
+				    		</div>
+				    	</div>
+		    		</div>
+				</div>
+			</form>
+		</div>
+		<div class="info">
+			<ng-container *ngIf="date.length > 0; else waitCalendar">
+				<div>
+					<div class="calendar-title">
+						<div class="month sub-title-element">
+							{{months[currentDate.month-1]}} {{year}}
+						</div>
+						<div class="actions">
+							<div class="button chevron" (click)="prev('months')"><mat-icon>chevron_left</mat-icon></div>
+							<div class="button chevron" (click)="next('months')"><mat-icon>chevron_right</mat-icon></div>
+						</div>
+					</div>
+					<div class="day-of-week">
+						<div *ngFor="let day of days">{{day}}</div>
+					</div>
+					<div class="date-grid">
+						<div *ngFor="let day of date ; let i = index" (click)="selectDay(i)" [ngClass]="{'today':day.today,'selected':day.selected,'events-day':day.events,'not-month':!day.dayOfMonth}">
+							{{day.day}}
+						</div>
+					</div>
+				</div>
+				<div (click)="addEvent()" class="button new">Nouvel évènement</div>
+			</ng-container>
+			<ng-template #waitCalendar>
+				<div class="wait-information">
+					Génération du calendrier
+					<mat-spinner [diameter]="50"></mat-spinner>
+				</div>
+			</ng-template>
+		</div>
+		<div class="calendar">
+			<ng-container *ngIf="date.length > 0; else waitMainCalendar">
+				<div class="action-elements">
+					<div class="move">
+						<div class="button chevron" (click)="prev(type)"><mat-icon>chevron_left</mat-icon></div>
+						<div class="button" (click)="today()">Aujourd'hui</div>
+						<div class="button chevron" (click)="next(type)"><mat-icon>chevron_right</mat-icon></div>
+					</div>
+					<div class="type">
+						<div [ngClass]="{'active':type === 'weeks'}" (click)="setType('weeks')" class="element week">Semaine</div>
+						<div [ngClass]="{'active':type === 'months'}" (click)="setType('months')" class="element month">Mois</div>
+						<div class="animated"></div>
+					</div>
+				</div>
+				<div class="events" [ngClass]="{'months':type === 'months'}">
+					<div class="days">
+						<div class="hour-element"></div>
+						<div [ngClass]="{'today':day.today}" *ngFor="let day of shownDays; let i = index">
+							<div class="more">{{fullDays[i]}}</div>
+							<div class="less">{{days[i]}}</div>
+							<div class="day" [ngClass]="{'show':type === 'weeks'}">{{day.day}}</div>
+						</div>
+						<div class="scroll-element"></div>
+					</div>
+					<div *ngIf="(type === 'weeks') && (shownEventsMultipleDays.length > 0)" class="multiple-days-events">
+						<div class="toggle-element">
+							<mat-icon *ngIf="shownEventsMultipleDaysDaysMaxLength > 0" class="toggle-collapse" [ngClass]="{'rotate':!collapseMultiple}" (click)="toggle()">expand_more</mat-icon>
+						</div>
+						<div [ngClass]="{'collapsed':collapseMultiple}" [style.--height]="shownEventsMultipleDaysDaysMaxLength+1" class="multiple-events">
+							<div id="event-element" *ngFor="let event of shownEventsMultipleDays" (click)="previewEvent(event,$event,1)" [ngClass]="{'active':shownEvent ? shownEvent.id_evenement === event.id_evenement : false}" class="multiple-event" [style.--starting-day]="event.startingDay" [style.--ending-day]="event.endingDay" [style.--width]="event.width" [style.--index]="event.eventIndex">
+								<div id="sub-event-element" class="title">{{event.titre}}</div>
+							</div>
+						</div>
+						<div class="scroll-element"></div>
+					</div>
+					<div #hours class="hours">
+						<ng-container *ngIf="type === 'weeks'; else months">
+							<div class="current-hour" [style.--hour]="dateToday.hour" [style.--minute]="dateToday.minute"></div>
+							<div class="separation"></div>
+							<div id="event-element" *ngFor="let event of shownEvents" (click)="previewEvent(event,$event,0)" [ngClass]="{'active':shownEvent ? shownEvent.id_evenement === event.id_evenement : false}" class="event" [style.--day]="event.eventDay" [style.--start]="event.eventStartHour" [style.--height]="event.eventHeight" [style.--index]="event.eventIndex" [style.--division]="shownEventsDaysHours ? (event | divide : shownEventsDaysHours) : 1">
+								<div id="sub-event-element" class="title">{{event.titre}}</div>
+								<div id="sub-event-element" *ngIf="event.eventHeight > 0.25" class="time">{{event.heure_debut}} - {{event.heure_fin}}</div>
+								<div id="sub-event-element" *ngIf="event.id_patient && event.pid_patient" class="link" (click)="showLink(event)"><mat-icon>person</mat-icon></div>
+							</div>
+							<ng-container *ngFor="let hour of ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23']">
+								<div class="hour-element">
+									<div class="hour">{{hour}}:00</div>
+									<div class="first quarter"></div>
+									<div class="medium"></div>
+									<div class="second quarter"></div>
+								</div>
+								<ng-container *ngFor="let i of [0,1,2,3,4,5,6]">
+									<div class="day-element">
+										<div class="first"></div>
+										<div class="second"></div>
+										<div class="third"></div>
+									</div>
+								</ng-container>
+							</ng-container>
+						</ng-container>
+						<ng-template #months>
+							<div class="week" *ngFor="let i of [0,1,2,3,4,5]">
+								<div class="month-events">
+									<ng-container *ngFor="let event of shownEventsMonth[i]">
+										<div id="sub-event-element" (click)="previewEvent(event,$event,2)" *ngIf="event.eventIndex < 2" [ngClass]="{'active':shownEvent ? shownEvent.id_evenement === event.id_evenement : false}" class="month-event" [style.--starting-day]="event.startingDay" [style.--ending-day]="event.endingDay" [style.--width]="event.width" [style.--index]="event.eventIndex">
+											<div id="sub-event-element" class="title">{{event.titre}}</div>
+										</div>
+									</ng-container>
+								</div>
+								<div class="day" *ngFor="let j of [0,1,2,3,4,5,6]">
+									<div [ngClass]="{'today':date[i*7+j].today}" class="day-number">{{date[i*7+j].day}}</div>
+									<div id="preview-month-events" (click)="showMonthEvents(i,j)" *ngIf="shownEventsMonthDays[i][date[i*7+j].day.toString() + date[i*7+j].month.toString() + date[i*7+j].year.toString()].length > 2" class="more">+ {{shownEventsMonthDays[i][date[i*7+j].day.toString() + date[i*7+j].month.toString() + date[i*7+j].year.toString()] | count}}</div>
+								</div>
+							</div>
+							<div id="preview-month-events sub-event-element" *ngIf="shownEventsPreviewMonth.length > 0" [style.--i]="shownEventsPreviewMonthI" [style.--j]="shownEventsPreviewMonthJ" class="preview-month-events" [ngClass]="{'top':shownEventsPreviewMonthI === 0,'left':shownEventsPreviewMonthJ === 0,'right':shownEventsPreviewMonthJ === 6,'bottom':shownEventsPreviewMonthI === 5}">
+								<div id="preview-month-events sub-event-element" class="header">
+									<div id="preview-month-events sub-event-element" class="day-number">{{date[shownEventsPreviewMonthI*7+shownEventsPreviewMonthJ].day}}</div>
+									<mat-icon class="close">close</mat-icon>
+								</div>
+								<div id="preview-month-events sub-event-element" class="month-preview-events">
+									<div id="preview-month-events sub-event-element" (click)="previewEvent(event,$event,2)" *ngFor="let event of shownEventsPreviewMonth" [ngClass]="{'active':shownEvent ? shownEvent.id_evenement === event.id_evenement : false}" class="month-preview-event">
+										<div id="preview-month-events sub-event-element" class="title">{{event.titre}}</div>
+									</div>
+								</div>
+							</div>
+						</ng-template>
+					</div>
+				</div>
+			</ng-container>
+			<ng-template #waitMainCalendar>
+				<div class="wait-information">
+					<mat-spinner [diameter]="80"></mat-spinner>
+				</div>
+			</ng-template>
+		</div>
+	</div>
+</div>

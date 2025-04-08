@@ -1,0 +1,214 @@
+<div [style.--color]="patientService.mainColors[patientService.user.color]" [style.--sup-color]="patientService.supColors[patientService.user.color]" [style.--fade-color]="patientService.svgColors[patientService.user.color]" [style.--text-color]="patientService.textColors[patientService.user.color]" class="invoice-container container">
+	<div class="container-title">
+		<div class="title-text title-element">
+			Facturation
+		</div>
+		<div *ngIf="list" class="button" (click)="newFacture()">
+			Nouvelle facture
+		</div>
+	</div>
+	<ng-container *ngIf="list; else detail">
+		<div class="panel search-container">
+			<div class="search-header sub-title-element">
+				Critères de recherche
+			</div>
+			<div class="criteria">
+				<div class="lastname">
+					<div class="label">
+						Nom
+					</div>
+					<div class="value">
+						<input matInput (input)="onChangeNom($event)">
+					</div>
+				</div>
+				<div class="firstname">
+					<div class="label">
+						Prénom
+					</div>
+					<div class="value">
+						<input matInput (input)="onChangePrenom($event)">
+					</div>
+				</div>
+			</div>
+		</div>
+		<ng-container *ngIf="listPatientFacture; else waitInvoices">
+			<div class="panel" *ngIf="listPatientFacture.length === 0; else invoices">
+				<div class="no-elements" *ngIf="factures.length > 0; else noInvoices">
+					Aucun résultat ne correspond à vos critères de recherche
+				</div>
+				<ng-template #noInvoices>
+					<div class="no-elements">
+						Vous n'avez établi aucune facture pour le moment<br>
+						<div (click)="newFacture()" class="button">En créer une</div>
+					</div>
+				</ng-template>
+			</div>
+			<ng-template #invoices>
+				<mat-accordion multi>
+					<mat-expansion-panel *ngFor="let element of listPatientFacture">
+						<mat-expansion-panel-header>
+							<div class="sub-title-element">
+								{{element.patient}}
+							</div>
+						</mat-expansion-panel-header>
+						<mat-list>
+							<mat-list-item (click)="showInvoice(invoice)" *ngFor="let invoice of element.factures"><mat-icon mat-list-icon>open_in_new</mat-icon>Consultation du {{invoice.date_consultation | date : 'mediumDate'}} - Facture #{{invoice.nbr_facture}}</mat-list-item>
+						</mat-list>
+					</mat-expansion-panel>
+				</mat-accordion>
+			</ng-template>
+		</ng-container>
+		<ng-template #waitInvoices>
+			<div class="panel">
+				<div class="animated-background">
+					<div class="background-masker first"></div>
+					<div class="background-masker second"></div>
+					<div class="background-masker third"></div>
+					<div class="background-masker fourth"></div>
+					<div class="background-masker fifth"></div>
+					<div class="background-masker sixth"></div>
+					<div class="background-masker seventh"></div>
+					<div class="background-masker eighth"></div>
+					<div class="background-masker nineth"></div>
+					<div class="background-masker tenth"></div>
+					<div class="background-masker eleventh"></div>
+					<div class="background-masker twelveth"></div>
+					<div class="background-masker thirteenth"></div>
+					<div class="background-masker fourteenth"></div>
+					<div class="background-masker fifteenth"></div>
+				</div>
+			</div>
+		</ng-template>
+	</ng-container>
+	<ng-template #detail>
+		<div (click)="back()" class="back button">
+			<mat-icon>arrow_back</mat-icon> Retour
+		</div>
+		<div class="invoice panel">
+			<div *ngIf="loading" class="loading-panel">
+				<div class="title-element error" *ngIf="error">Une erreur est survenue, merci de réessayer</div>
+				<div class="title-element success" *ngIf="success">La facture a bien été créée</div>
+				<div class="title-element spinner" *ngIf="!error && !success">
+					<mat-spinner [diameter]="50"></mat-spinner>
+					Création de la facture
+				</div>
+			</div>
+			<div [ngClass]="{'blur':loading}">
+				<div class="date">
+					<ng-container *ngIf="show; else showToday">
+						{{dateInvoice | date : 'dd/MM/yyyy'}}
+					</ng-container>
+					<ng-template #showToday>
+						{{today | date : 'mediumDate'}}
+					</ng-template>
+				</div>
+				<div class="title title-element">
+					Facture #
+					<ng-container *ngIf="show; else showNumber">
+						{{numberInvoice}}
+					</ng-container>
+					<ng-template #showNumber>
+						{{patientService.user.nbr_facture+1}}
+					</ng-template>
+				</div>
+				<div class="divider"></div>
+				<div class="stamp">
+					Tampon
+				</div>
+				<div class="divider"></div>
+				<div class="receiver">
+					<div class="sub-title-element">
+						<b>Pour</b>
+					</div>
+					<ng-container *ngIf="show; else notShow">
+						{{patient.nom}} {{patient.prenom}}<br>
+					</ng-container>
+					<ng-template #notShow>
+						<mat-select placeholder="Choisir une fiche" (selectionChange)="onChange($event)">
+							<mat-option [disabled]="true">
+								<input matInput placeholder="Chercher" (keydown)="$event.stopPropagation()" [(ngModel)]="namePatient">
+							</mat-option>
+							<mat-option *ngFor="let patient of patients | filterpatient : namePatient" value="{{patient.id_patient}}">
+								{{patient.nom}} {{patient.prenom}}
+							</mat-option>
+						</mat-select>
+					</ng-template>
+				</div>
+				<div class="divider"></div>
+				<ng-container *ngIf="!show; else showElement">
+					<div *ngIf="!(consultationsFacture.length > 0); else patientChecked">
+						Aucune fiche sélectionnée
+					</div>
+					<ng-template #patientChecked>
+						<div *ngIf="consultationsFacture.length === 0; else noConsultations">
+							Toutes les consultations de cette fiche possèdent une facture
+						</div>
+						<ng-template #noConsultations>
+							<mat-select class="select" placeholder="Choisir une consultation" (selectionChange)="onChangeConsult($event)">
+								<mat-option *ngFor="let consultation of consultationsFacture" value="{{consultation.id_consultation}}">
+									{{consultation.date_consultation | date:'dd/MM/yyyy'}}
+								</mat-option>
+							</mat-select>
+							<div class="details">
+								<div class="header row">
+									<div class="object">Objet</div>
+									<div class="date">Date de consultation</div>
+									<div class="price">Montant</div>
+								</div>
+								<div class="values row">
+									<div class="object">
+										<div class="input-wrap">
+											<input #object matInput [disabled]="isDisabledObjet()" [(ngModel)]="objet" placeholder="Consultation de ..." maxlength="35">
+											<div class="hint">{{object.value.length}} / 35</div>
+										</div>
+									</div>
+									<div class="date">
+										<span *ngIf="dateConsultation; else noDateConsultation">{{dateConsultation | date :'dd/MM/yyyy'}}</span>
+										<ng-template #noDateConsultation>
+											<span class="no-patient">31/12/1999</span>
+										</ng-template>
+									</div>
+									<div class="price">
+										<span *ngIf="dateConsultation; else noPrice">{{montant}}€</span>
+										<ng-template #noPrice>
+											<span class="no-patient">60€</span>
+										</ng-template>
+									</div>
+								</div>
+							</div>
+						</ng-template>
+					</ng-template>
+				</ng-container>
+				<ng-template #showElement>
+					<div class="details">
+						<div class="header row">
+							<div class="object">Objet</div>
+							<div class="date">Date de consultation</div>
+							<div class="price">Montant</div>
+						</div>
+						<div class="values row">
+							<div class="object">{{objet}}</div>
+							<div class="date">{{dateConsultation | date :'dd/MM/yyyy'}}</div>
+							<div class="price">{{montant}}€</div>
+						</div>
+					</div>
+				</ng-template>
+			</div>
+		</div>
+		<div *ngIf="!show; else showButtons" class="button-wrapper end">
+			<div [ngClass]="{'disabled':isDisabledButton() || loading}" class="button" (click)="createFacture()">
+				Créer la facture
+			</div>
+		</div>
+		<ng-template #showButtons>
+			<div class="button-wrapper space">
+				<div class="button" (click)="downloadPDF()">
+					Télécharger la facture
+				</div>
+				<div class="button" (click)="sendPDF()">
+					Envoyer par mail
+				</div>
+			</div>
+		</ng-template>
+	</ng-template>
+</div>

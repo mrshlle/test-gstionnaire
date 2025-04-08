@@ -1,0 +1,12 @@
+{
+	"src": "dist/packages/BudCare-linux-x64",
+	"dest": "dist/installers/",
+	"icon": "src/assets/icon.png",
+	"options": {
+		"productName": "BudCare",
+		"description": "Logiciel de gestion de patientelle pour medecine alternative",
+		"productDescription": "Logiciel aidant a la gestion de son cabinet de medecine alternative. Osteopathe, Reflexologue, Hypnotherapeute, ... Quelque soit la medecine, BudCare aide a gerer efficacement ses patients",
+		"version": "0.0.2",
+		"icon": "src/assets/icon.png"
+	}
+}

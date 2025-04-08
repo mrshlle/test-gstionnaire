@@ -1,0 +1,13 @@
+<div *ngIf="demo" class="demo-watermark">
+	Mode démonstration
+</div>
+<div class="flex-page">
+	<div class="menu-header" *ngIf="authService.isAuth">
+		<app-header></app-header>
+	</div>
+	<div class="main" [ngClass]="{'background-color':!authService.isAuth}">
+		<app-notification *ngIf="authService.isAuth"></app-notification>
+		<router-outlet></router-outlet>
+	</div>
+	<app-note *ngIf="authService.isAuth && note"></app-note>
+</div>

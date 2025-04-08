@@ -1,0 +1,487 @@
+.patient-container{
+	--color:red;
+	--sup-color:red;
+	--text-color:red;
+	--fade-color:red;
+}
+
+.patient-container .container-title .title-wrapper{
+	display: flex;
+	flex-wrap: wrap;
+	gap:20px;
+	align-items: flex-end;
+}
+
+.patient-container .container-title .title-wrapper .title-text{
+	display: flex;
+	align-items: center;
+}
+
+.patient-container .container-title .title-wrapper .title-text mat-icon{
+	margin-left: 10px;
+}
+
+.patient-container .container-title .title-wrapper .title-text:after{
+	background-color: var(--color);
+}
+
+.patient-container .container-title .button{
+	background-color: var(--color);
+	color:var(--text-color);
+}
+
+.patient-container .container-title .edit-buttons{
+	display: flex;
+}
+
+.patient-container .container-title .edit-buttons > div:last-child{
+	background-color: #cecece;
+	color:black;
+	margin-left:10px;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .mat-checkbox-frame, :host ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+	border-color: var(--color);
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, :host ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle{
+	background-color:var(--color);
+}
+
+.patient-container .records-tab{
+	margin-top:20px;
+	margin-bottom: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap:20px;
+}
+
+.patient-container .records-tab .record{
+	padding:40px;
+	background: radial-gradient(circle at right bottom,#cecece 0%, #ececec 100%);
+	border-radius: 10px;
+	font-weight: bold;
+	cursor: pointer;
+	text-align: center;
+}
+
+.patient-container .records-tab .record.active{
+	background: radial-gradient(circle at right bottom,var(--sup-color) 0%, var(--color) 100%);
+	color:var(--text-color);
+}
+
+.patient-container .records-tab .record.disabled{
+	cursor: default;
+	background: unset;
+	background-color: #ececec;
+	color:#cecece;
+}
+
+.patient-container .records-tab .important{
+	flex:1;
+	display: flex;
+	flex-direction: column;
+}
+
+.patient-container .records-tab .important textarea{
+	flex:1;
+	resize:none;
+	width:100%;
+	border: 1px solid #cecece;
+	border-radius: 5px;
+	height:100%;
+	background-color: transparent;
+	padding:10px;
+	margin-top: 5px;
+}
+
+.patient-container .records-tab .important textarea:focus{
+	border-color: #a8a8a8;
+}
+
+.patient-container .loading-wrapper{
+	position: relative;
+	overflow: hidden;
+}
+
+.patient-container .loading{
+	position: absolute;
+	top:0;
+	right:0;
+	left:0;
+	bottom:0;
+	z-index: 10;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	background-color: var(--color);
+	border-radius:10px;
+	transform: translateY(101%);
+	transition: transform 0.2s;
+	color:var(--text-color);
+}
+
+.patient-container .loading.show{
+	transform: translateY(0);
+}
+
+:host ::ng-deep .patient-container .loading .mat-mdc-progress-spinner circle{
+	stroke:var(--text-color);
+}
+
+:host ::ng-deep .patient-container .mat-expansion-panel:not([class*="mat-elevation-z"]){
+	box-shadow:10px 10px 10px 0px rgba(200,200,200,0.1);
+	border-bottom: 2px solid var(--fade-color);
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
+:host ::ng-deep .patient-container .mat-expansion-panel-header{
+	padding:20px;
+	height: auto;
+}
+
+:host ::ng-deep .patient-container .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled="true"]){
+	background-color: white;
+}
+
+:host ::ng-deep .patient-container .mat-expansion-panel-body{
+	padding:20px;
+	padding-top: 0;
+}
+
+.patient-container mat-accordion{
+	margin-top: 20px;
+}
+
+.patient-container mat-accordion .sub-title-element{
+	font-weight: bold;
+}
+
+.patient-container mat-accordion .divider{
+	width: 80%;
+	height: 1px;
+	background-color: #ececec;
+	margin: auto;
+	margin-bottom: 20px;
+}
+
+.patient-container mat-accordion .question{
+	display: flex;
+	flex-direction: column;
+}
+
+.patient-container mat-accordion .question .entitled{
+	margin-bottom: 5px;
+	margin-top:10px;
+	width: max-content;
+}
+
+.patient-container mat-accordion .question:first-child .entitled{
+	margin-top: 0;
+}
+
+.patient-container mat-accordion .question .entitled.required{
+	position: relative;
+}
+
+.patient-container mat-accordion .question .entitled.required:after{
+	content:'*';
+	color:#d25656;
+	font-size:12px;
+	position: absolute;
+	right:-10px;
+	top:0;
+}
+
+.patient-container mat-accordion .question .value input, .patient-container mat-accordion .question .value .mat-mdc-select, .patient-container mat-accordion .question textarea{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:calc(100% - 20px);
+	padding: 10px;
+}
+
+.patient-container mat-accordion .question .value .mat-mdc-select{
+	width:100%;
+}
+
+.patient-container mat-accordion .question .textarea{
+	margin-top: 10px;
+}
+
+.patient-container mat-accordion .question textarea{
+	resize: none;
+	height: 120px;
+	margin-top: 5px;
+}
+
+.patient-container mat-accordion .question .value .mat-mdc-select{
+	padding:0;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+:host ::ng-deep .patient-container mat-accordion .question .value .mat-mdc-select .mat-select-trigger{
+	padding:10px;
+	height:auto;
+}
+
+.patient-container mat-accordion .question .value input:focus, .patient-container mat-accordion .question .value .mat-mdc-select:focus{
+	border-color: #cecece;
+}
+
+.patient-container mat-accordion .question .value mat-checkbox, .patient-container mat-accordion .question .value mat-radio-button{
+	padding:5px;
+	background-color: #f7f7f7;
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+
+.patient-container mat-accordion .question .value mat-radio-button{
+	border-radius: 15px;
+}
+
+.patient-container mat-accordion .question .value mat-checkbox:not(:last-child), .patient-container mat-accordion .question .value mat-radio-button:not(:last-child){
+	margin-right: 5px;
+}
+
+.patient-container mat-accordion .question .value mat-checkbox.mat-mdc-checkbox-checked, .patient-container mat-accordion .question .value mat-radio-button.mat-radio-checked{
+	background-color: var(--fade-color);
+}
+
+.patient-container mat-accordion .question .value-date{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	border: 1px solid #ececec;
+	border-radius: 5px;
+}
+
+.patient-container mat-accordion .question .value-date span{
+	width:90%;
+	position: relative;
+}
+
+.patient-container mat-accordion .question .value-date input{
+	border: none;
+	padding:10px;
+	background-color:transparent;
+	width: 100%;
+}
+
+.patient-container mat-accordion .question .value-date span:not(:last-child):after{
+	position: absolute;
+	content: '/';
+	right: -9%;
+	bottom: 50%;
+	transform: translateY(50%);
+}
+
+.patient-container mat-accordion .question .value-file{
+	border: 1px dashed #cecece;
+	border-radius: 5px;
+	height: 120px;
+	position: relative;
+}
+
+.patient-container mat-accordion .question .value-file .picker{
+	width:100%;
+	height: 100%;
+	cursor: pointer;
+	display: block;
+}
+
+.patient-container mat-accordion .question .value-file .file-list{
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(4,1fr);
+}
+
+.patient-container mat-accordion .question .value-file .text-picker{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%
+}
+
+.patient-container mat-accordion .question .value-file .file-list .text-picker{
+	min-width: 200px;
+}
+
+.patient-container mat-accordion .question .value-file .file-list .documents{
+	display: flex;
+	flex-direction: row;
+	column-gap:10px;
+	overflow: auto;
+	scrollbar-width:thin;
+	padding:10px;
+}
+
+.patient-container mat-accordion .question .value-file .file-list .documents{
+	grid-column: 1/span 4;
+}
+
+.patient-container mat-accordion .question .value-file .picker.file-list .documents{
+	grid-column: 2/span 3;
+}
+
+.patient-container mat-accordion .question .value-file .file-list .document{
+	margin-top: 0;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	width: 150px;
+	min-width: 150px;
+	border:1px solid #ececec;
+	box-shadow:0 0 4px #ececec;
+}
+
+.patient-container mat-accordion .question .value-file .file-list .document mat-icon{
+	height: 18px;
+	width:18px;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.patient-container mat-accordion .question .value-file .file-list .document .document-text{
+	flex:1;
+	word-wrap: anywhere;
+	overflow: auto;
+	scrollbar-width:thin;
+}
+
+.patient-container mat-accordion .question .value-file .picker .text-picker mat-icon{
+	height: 50px;
+	width:50px;
+	font-size: 50px;
+	color:var(--color);
+}
+
+.patient-container mat-accordion .elements{
+	display: flex;
+}
+
+.patient-container mat-accordion .elements .questions-element{
+	flex:2;
+	align-items: start;
+}
+
+.patient-container mat-accordion .elements .questions-element.center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.patient-container mat-accordion .elements .divider{
+	height: auto;
+	width: 1px;
+	background-color: #ececec;
+	margin:20px;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.patient-container mat-accordion .elements .price-element{
+	flex:1;
+}
+
+:host ::ng-deep .patient-container mat-accordion .consultation .mat-content{
+	align-items: center;
+}
+
+:host ::ng-deep .patient-container mat-accordion .consultation .mat-content mat-icon{
+	color:#df0000;
+	margin-right: 10px;
+}
+
+.patient-container .button.submit{
+	background-color: var(--color);
+	float:right;
+	margin-top: 20px;
+	padding:20px;
+	color:var(--text-color);
+}
+
+.patient-container .button.submit.consult{
+	background-color: var(--fade-color);
+	float:initial;
+	width: calc(100% - 20px);
+	margin-top: 20px;
+	padding:10px;
+	justify-content: center;
+	color:black;
+}
+
+.patient-container .button.submit.disabled{
+	background-color: #ececec;
+	color:#cecece;
+	cursor: default;
+}
+
+@media screen and (max-width:650px){
+	.patient-container .records-tab{
+		display: grid;
+		grid-template-columns:repeat(2,1fr);
+	}
+
+	.patient-container .records-tab .record{
+		padding:30px;
+	}
+
+	.patient-container .records-tab .important{
+		grid-column:1/span 2;
+	}
+ 
+	.patient-container .container-title{
+		flex-direction:column;
+	}
+
+	.patient-container .container-title .title-wrapper .title-text:after{
+		content:none;
+	}
+
+	.patient-container .container .button{
+		margin-top: 10px;
+	}
+
+	.patient-container mat-accordion .elements{
+		flex-direction: column;
+	}
+
+	.patient-container mat-accordion .elements .divider{
+		height: 1px;
+		width: auto;
+		margin:20px;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	.patient-container mat-accordion .question .value-file{
+		height: 240px;
+	}
+
+	.patient-container mat-accordion .question .value-file .file-list .text-picker{
+		width: auto;
+		min-width: 200px;
+		grid-column:1/span 4;
+	}
+
+	.patient-container mat-accordion .question .value-file .picker.file-list .documents{
+		grid-column: 1/span 4;
+	}
+}
+
+@media screen and (max-width:400px){
+	.patient-container .records-tab .record{
+		padding:20px;
+	}
+}
+
+@media screen and (max-width:320px){
+	.patient-container .records-tab .record{
+		padding:17px;
+	}
+}

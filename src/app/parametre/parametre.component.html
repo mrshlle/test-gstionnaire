@@ -1,0 +1,293 @@
+<div [style.--text-color]="patientService.textColors[patientService.user.color]" [style.--color]="patientService.mainColors[patientService.user.color]" [style.--fade-color]="patientService.svgColors[patientService.user.color]" [style.--sup-color]="patientService.supColors[patientService.user.color]" [style.--sub-color]="patientService.subColors[patientService.user.color]" class="settings-container container">
+	<div class="container-title">
+		<div class="title-text title-element">
+			Paramètres
+		</div>
+	</div>
+	<div class="records-tab">
+		<div class="record" (click)="settings = 0" [ngClass]="{'active':settings === 0}">Configuration</div>
+		<div class="record" (click)="settings = 1" [ngClass]="{'active':settings === 1}">Personnalisation</div>
+		<div class="record" (click)="settings = 2" [ngClass]="{'active':settings === 2}">Formulaires</div>
+	</div>
+	<ng-container *ngIf="settings === 0">
+		<div class="wrapper">
+			<div class="buttons">
+				<div *ngIf="!editPrice" (click)="updatePrice()" [ngClass]="{'disabled':loadingPrice}" class="button">
+					Modifier
+				</div>
+				<div *ngIf="editPrice" (click)="updatePrice()" [ngClass]="{'disabled':loadingPrice || disabledPrice}" class="button">
+					Appliquer
+				</div>
+				<div *ngIf="editPrice" (click)="cancelPrice()" [ngClass]="{'disabled':loadingPrice}" class="button">
+					Annuler
+				</div>
+			</div>
+			<div class="panel">
+				<form [formGroup]="priceForm">
+					<div class="loading" [ngClass]="{'show':loadingPrice}">
+						<mat-spinner *ngIf="!errorPrice && !successPrice" [diameter]="40"></mat-spinner>
+						<div *ngIf="errorPrice">Une erreur est survenue, merci de réessayer</div>
+						<div *ngIf="successPrice">Modification prise en compte avec succes</div>
+					</div>
+					<div class="sub-title-element">
+						Prix standard (€)
+					</div>
+					<div class="divider"></div>
+					<input matInput (keypress)="numberOnly($event)" formControlName="price" (input)="updateDisable($event,2)">
+				</form>
+			</div>
+		</div>
+		<div class="wrapper">
+			<div class="buttons">
+				<div *ngIf="!editExtra" (click)="updateExtra()" [ngClass]="{'disabled':loadingExtra}" class="button">
+					Modifier
+				</div>
+				<div *ngIf="editExtra" (click)="updateExtra()" [ngClass]="{'disabled':loadingExtra || disabledExtra}" class="button">
+					Appliquer
+				</div>
+				<div *ngIf="editExtra" (click)="cancelExtra()" [ngClass]="{'disabled':loadingExtra}" class="button">
+					Annuler
+				</div>
+			</div>
+			<div class="panel">
+				<form [formGroup]="extraForm">
+					<div class="loading" [ngClass]="{'show':loadingExtra}" *ngIf="loadingExtra">
+						<mat-spinner *ngIf="!errorExtra && !successExtra" [diameter]="40"></mat-spinner>
+						<div class="error" *ngIf="errorExtra">Une erreur est survenue, merci de réessayer</div>
+						<div class="success" *ngIf="successExtra">Modification prise en compte avec succes</div>
+					</div>
+					<div class="sub-title-element">
+						Taxes exceptionnelles (€)
+					</div>
+					<div class="divider"></div>
+					<ng-container formArrayName="extra" *ngFor="let tab of getControl(extraForm,'extra').controls ; let i = index">
+						<div [formGroupName]="i" class="fields">
+							<div class="field">
+								<div class="label">
+									Intitulé
+								</div>
+								<div class="value">
+									<input matInput formControlName="name" (input)="updateDisable($event,3)">
+								</div>
+							</div>
+							<div class="field">
+								<div class="label">
+									Valeur
+								</div>
+								<div class="value">
+									<input matInput (keypress)="numberOnly($event)" formControlName="price" (input)="updateDisable($event,3)">
+								</div>
+							</div>
+							<mat-icon *ngIf="editExtra" (click)="removeSpecialPrice(i)">remove</mat-icon>
+						</div>
+					</ng-container>
+					<mat-icon *ngIf="editExtra && extraNumber < 5" class="add-icon" (click)="addSpecialPrice()">add</mat-icon>
+				</form>
+			</div>
+		</div>
+		<div class="wrapper">
+			<div class="buttons">
+				<div *ngIf="!editStamp" (click)="updateStamp()" [ngClass]="{'disabled':loadingStamp}" class="button">
+					Modifier
+				</div>
+				<div *ngIf="editStamp" (click)="updateStamp()" [ngClass]="{'disabled':loadingStamp || disabledStamp}" class="button">
+					Appliquer
+				</div>
+				<div *ngIf="editStamp" (click)="cancelStamp()" [ngClass]="{'disabled':loadingStamp}" class="button">
+					Annuler
+				</div>
+			</div>
+			<div class="panel">
+				<form [formGroup]="stampForm">
+					<div class="loading" [ngClass]="{'show':loadingStamp}">
+						<mat-spinner *ngIf="!errorStamp && !successStamp" [diameter]="40"></mat-spinner>
+						<div class="error" *ngIf="errorStamp">Une erreur est survenue, merci de réessayer</div>
+						<div class="success" *ngIf="successStamp">Modification prise en compte avec succes</div>
+					</div>
+					<div class="sub-title-element">
+						Tampon
+					</div>
+					<div class="divider"></div>
+					<mat-radio-group (change)="updateDisable($event,0)" formControlName="type">
+						<div class="stamp-options">
+							<div class="stamp-text">
+								<div [ngClass]="{'hidden':editStamp}">Texte</div>
+								<mat-radio-button [ngClass]="{'hidden': !editStamp}" value="0">Utiliser du texte</mat-radio-button>
+								<ng-container formArrayName="stamp" *ngFor="let tab of getControl(stampForm,'stamp').controls ; let i = index">
+									<div class="fields">
+										<div class="field">
+											<div class="value">
+												<input matInput maxlength="50" [formControlName]="i" (input)="updateDisable($event,0)">
+											</div>
+										</div>
+										<mat-icon *ngIf="editStamp" (click)="removeStampElement(i)">remove</mat-icon>
+									</div>
+								</ng-container>
+								<mat-icon *ngIf="editStamp && stampNumber < 7" class="add-icon" (click)="addStampElement()">add</mat-icon>
+							</div>
+							<div class="stamp-image">
+								<ng-container *ngIf="patientService.demo; else noDemo">
+									Hors mode démonstration, vous pouvez utiliser une image pour votre tampon
+								</ng-container>
+								<ng-template #noDemo>
+									<div [ngClass]="{'hidden':editStamp}">Image</div>
+									<mat-radio-button [disabled]="!stampImage" [ngClass]="{'hidden': !editStamp}" value="1">Utiliser une image</mat-radio-button>
+									<div *ngIf="!editStamp && !stampImage">Aucune image importée</div>
+									<div *ngIf="!stampImage" [ngClass]="{'hidden': !editStamp}" class="file-picker">
+										<input [disabled]="stampImageLoading" (change)="addFile($event)" id="file" type="file" accept="image/*" style="display: none;">
+										<label [ngClass]="{'loading-label':stampImageLoading}" class="picker" for="file">
+											<mat-spinner *ngIf="stampImageLoading" [diameter]="40"></mat-spinner>
+											<div class="text-picker">
+												<mat-icon>file_upload</mat-icon>
+												<div>Importer un fichier</div>
+												<div>Maximum 2MB</div>
+											</div>
+										</label>
+									</div>
+									<div *ngIf="stampImage" [ngClass]="{'loading-image':stampImageLoading}" class="image">
+										<mat-icon (click)="showStampImage()">zoom_out_map</mat-icon>
+										<mat-icon *ngIf="editStamp" (click)="removeStampImage()">delete</mat-icon>
+										<mat-spinner *ngIf="stampImageLoading" [diameter]="40"></mat-spinner>
+										<img [src]="stampImage.src">
+									</div>
+								</ng-template>
+							</div>
+						</div>
+					</mat-radio-group>
+				</form>
+			</div>
+		</div>
+		<div class="panel signature">
+			<div class="sub-title-element">
+				Signature pour facture
+			</div>
+			<div class="divider"></div>
+			<ng-container *ngIf="patientService.demo; else noDemoSignature">
+				Hors mode démonstration, vous pouvez utiliser une image pour votre signature
+			</ng-container>
+			<ng-template #noDemoSignature>
+				<div *ngIf="!signatureImage" class="file-picker">
+					<input [disabled]="signatureImageLoading" (change)="addFileSignature($event)" id="signature-file" type="file" accept="image/*" style="display: none;">
+					<label [ngClass]="{'loading-label':signatureImageLoading}" class="picker" for="signature-file">
+						<mat-spinner *ngIf="signatureImageLoading" [diameter]="40"></mat-spinner>
+						<div class="text-picker">
+							<mat-icon>file_upload</mat-icon>
+							<div>Importer un fichier</div>
+							<div>Maximum 2MB</div>
+						</div>
+					</label>
+				</div>
+				<div *ngIf="signatureImage" [ngClass]="{'loading-image':signatureImageLoading}" class="image">
+					<mat-icon (click)="showSignatureImage()">zoom_out_map</mat-icon>
+					<mat-icon (click)="removeSignatureImage()">delete</mat-icon>
+					<mat-spinner *ngIf="signatureImageLoading" [diameter]="40"></mat-spinner>
+					<img [src]="signatureImage.src">
+				</div>
+			</ng-template>
+		</div>
+		<div class="wrapper">
+			<div class="buttons">
+				<div *ngIf="!editFooter" (click)="updateFooter()" [ngClass]="{'disabled':loadingFooter}" class="button">
+					Modifier
+				</div>
+				<div *ngIf="editFooter" (click)="updateFooter()" [ngClass]="{'disabled':loadingFooter || disabledFooter}" class="button">
+					Appliquer
+				</div>
+				<div *ngIf="editFooter" (click)="cancelFooter()" [ngClass]="{'disabled':loadingFooter}" class="button">
+					Annuler
+				</div>
+			</div>
+			<div class="panel">
+				<form [formGroup]="footerForm">
+					<div class="loading" [ngClass]="{'show':loadingFooter}">
+						<mat-spinner *ngIf="!errorFooter && !successFooter" [diameter]="40"></mat-spinner>
+						<div class="error" *ngIf="errorFooter">Une erreur est survenue, merci de réessayer</div>
+						<div class="success" *ngIf="successFooter">Modification prise en compte avec succes</div>
+					</div>
+					<div class="sub-title-element">
+						Bas de page pour facture
+					</div>
+					<div class="divider"></div>
+					<mat-checkbox class="checkbox" (change)="updateDisable($event,4)" formControlName="footer">Ajouter le bas de page à chaque facture</mat-checkbox>
+					<div class="field">
+						<div class="label">
+							Texte à afficher dans le bas de page
+						</div>
+						<div class="value">
+							<textarea formControlName="footerText" (input)="updateDisable($event,4)"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="wrapper">
+			<div class="buttons">
+				<div *ngIf="!editFee" (click)="updateFee()" [ngClass]="{'disabled':loadingFee}" class="button">
+					Modifier
+				</div>
+				<div *ngIf="editFee" (click)="updateFee()" [ngClass]="{'disabled':loadingFee || disabledFee}" class="button">
+					Appliquer
+				</div>
+				<div *ngIf="editFee" (click)="cancelFee()" [ngClass]="{'disabled':loadingFee}" class="button">
+					Annuler
+				</div>
+			</div>
+			<div class="panel">
+				<form [formGroup]="feeForm">
+					<div class="loading" [ngClass]="{'show':loadingFee}">
+						<mat-spinner *ngIf="!errorFee && !successFee" [diameter]="40"></mat-spinner>
+						<div class="error" *ngIf="errorFee">Une erreur est survenue, merci de réessayer</div>
+						<div class="success" *ngIf="successFee">Modification prise en compte avec succes</div>
+					</div>
+					<div class="sub-title-element">
+						Charge par défaut (%)
+					</div>
+					<div class="divider"></div>
+					<input matInput (keypress)="numberOnlyCharge($event)" formControlName="fee" (input)="updateDisable($event,1)">
+				</form>
+			</div>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="settings === 1">
+		<div class="wrapper">
+			<div class="buttons">
+				<div *ngIf="!editColor" (click)="updateColor()" [ngClass]="{'disabled':loadingColor}" class="button">
+					Modifier
+				</div>
+				<div *ngIf="editColor" (click)="updateColor()" [ngClass]="{'disabled':loadingColor || disabledColor}" class="button">
+					Appliquer
+				</div>
+				<div *ngIf="editColor" (click)="cancelColor()" [ngClass]="{'disabled':loadingColor}" class="button">
+					Annuler
+				</div>
+			</div>
+			<div class="panel">
+				<div class="loading" [ngClass]="{'show':loadingColor}">
+					<mat-spinner *ngIf="!errorColor && !successColor" [diameter]="40"></mat-spinner>
+					<div *ngIf="errorColor">Une erreur est survenue, merci de réessayer</div>
+					<div *ngIf="successColor">Modification prise en compte avec succes</div>
+				</div>
+				<div class="sub-title-element">
+					Couleur du logiciel
+				</div>
+				<div class="divider"></div>
+				<div class="colors">
+					<div (click)="setColor(i)" *ngFor="let color of patientService.mainColors; let i = index" [style.background-color]="color" [ngClass]="{'color':true,'selected':i === userColor, 'disabled':!editColor}">
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="settings === 2">
+		<div class="records-tab forms">
+			<div class="record" (click)="tab = 0" [ngClass]="{'active':tab === 0}">Fiche principale</div>
+			<div class="record" (click)="tab = 1" [ngClass]="{'active':tab === 1}">Consultation</div>
+		</div>
+		<ng-container *ngIf="tab === 0">
+			<app-modification></app-modification>
+		</ng-container>
+		<ng-container *ngIf="tab === 1">
+			<app-informations-consultation></app-informations-consultation>
+		</ng-container>
+	</ng-container>
+</div>

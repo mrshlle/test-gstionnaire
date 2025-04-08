@@ -1,0 +1,13 @@
+<div class="modal-container">
+	<mat-icon (click)="close()" class="close">close</mat-icon>
+	<div class="title">{{title}}</div>
+	<div class="content" [innerHTML]="content"></div>
+	<div class="input-wrap">
+		<input #object matInput [(ngModel)]="objet" maxlength="35">
+		<div class="hint">{{object.value.length}} / 35</div>
+	</div>
+	<div class="actions">
+		<div (click)="close()">{{cancel}}</div>
+		<div (click)="creerFacture(true)" [ngClass]="{'disabled':disableOui()}">{{confirm}}</div>
+	</div>
+</div>

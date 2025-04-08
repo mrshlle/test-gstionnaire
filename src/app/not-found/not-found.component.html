@@ -1,0 +1,11 @@
+<div class="not-found-component">
+	<div class="wrapper">
+		<div class="main-title">
+			Erreur 404 : Cette page n'existe pas
+		</div>
+		<div class="sub-title">
+			<ng-container *ngIf="_authService.isAuth; else elseNotAuth">Rendez-vous sur un des onglets pour accéder aux différentes pages du logiciel</ng-container>
+			<ng-template #elseNotAuth>Connectez-vous <span class="connect" (click)="connect()">ici</span> avant de pouvoir naviguer parmi les pages du logiciel</ng-template>
+		</div>
+	</div>
+</div>

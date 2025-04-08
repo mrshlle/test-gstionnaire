@@ -1,0 +1,63 @@
+.notification-container{
+	--rgbcolor:red;
+	position: absolute;
+	padding:20px;
+	z-index: 100;
+}
+
+.notification-container mat-icon{
+	height: 30px;
+	width: 30px;
+	font-size: 30px;
+	color: #d5d5d5db;
+	cursor: pointer;
+	position: relative;
+}
+
+.notification-container mat-icon:hover{
+	color:rgba(var(--rgbcolor),0.85);
+	text-shadow: 0px 3px 3px #fff, 0 0 0 #000, 0px 3px 3px #fff;
+}
+
+.notification-container mat-icon.active:after{
+	content: '';
+	position: absolute;
+	height:8px;
+	width:8px;
+	top:0px;
+	right:0px;
+	background-color: red;
+	border-radius: 25px;
+}
+
+.notification-container .notifications{
+	width: 400px;
+	margin-top: 0;
+	display: none;
+}
+
+.notification-container .notifications .sub-title-element{
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.notification-container .notifications .description{
+	border:none;
+	width: 100%;
+	resize: none;
+}
+
+.notification-container .notifications .sub-text-element{
+	color:#bdbdbd;
+	margin-top: 10px;
+}
+
+.notification-container .notifications.active{
+	display: block;
+}
+
+@media screen and (max-width: 500px){
+	.notification-container .notifications{
+		width: 100%;
+	}
+}

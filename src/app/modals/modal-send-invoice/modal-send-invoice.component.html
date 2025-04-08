@@ -1,0 +1,14 @@
+<div class="modal-container">
+	<mat-icon (click)="close()" class="close">close</mat-icon>
+	<div class="title">Envoi facture par mail</div>
+	<div class="content">
+		<form [formGroup]="mailForm">
+			<mat-checkbox disableRipple formControlName="stamp">Ajouter le tampon numérique</mat-checkbox><br><br>
+			Email de réception : <input matInput formControlName="email">
+		</form>
+	</div>
+	<div class="actions">
+		<div (click)="close()">Annuler</div>
+		<div (click)="confirmAndClose()">Envoyer</div>
+	</div>
+</div>

@@ -1,0 +1,521 @@
+<div [style.--text-color]="patientService.textColors[patientService.user.color]" [style.--color]="patientService.mainColors[patientService.user.color]" [style.--fade-color]="patientService.svgColors[patientService.user.color]" [style.--sup-color]="patientService.supColors[patientService.user.color]" class="patient-container container">
+	<div class="container-title">
+		<ng-container *ngIf="show; else noPatient">
+			<div class="title-wrapper">
+				<div class="title-text title-element">
+					<div>{{patientService.currentPatient.prenom}} {{patientService.currentPatient.nom}}</div> 
+					<mat-icon *ngIf="patientService.currentPatient.alerte && !edit" class="warning">warning</mat-icon>
+				</div>
+				<form *ngIf="warningForm && edit" [formGroup]="warningForm">
+					<mat-checkbox [disableRipple]="true" formControlName="warning">Warning</mat-checkbox>
+				</form>
+			</div>
+			<div class="edit-buttons" *ngIf="edit; else noEdit">
+				<div (click)="modifyPatient()" [ngClass]="{'disabled':isDisabled() || disabled}" class="button">
+					Confirmer
+				</div>
+				<div (click)="cancel()" class="button">
+					Annuler
+				</div>
+			</div>
+			<ng-template #noEdit>
+				<div (click)="modifyPatient()" class="button">
+					Modifier
+				</div>
+			</ng-template>
+		</ng-container>
+		<ng-template #noPatient>
+			<div class="title-wrapper">
+				<div class="title-text title-element">
+					<p>Nouvelle fiche</p>
+				</div>
+				<form *ngIf="warningForm" [formGroup]="warningForm">
+					<mat-checkbox formControlName="warning">Warning</mat-checkbox>
+				</form>
+			</div>
+		</ng-template>
+	</div>
+	<div class="records-tab">
+		<div class="record" (click)="main = true" [ngClass]="{'active':main}">Fiche principale</div>
+		<div class="record" (click)="show ? main = false : main = true" [ngClass]="{'active':!main,'disabled':!show}">Consultations</div>
+		<form *ngIf="importantForm" [formGroup]="importantForm" class="important">
+			<div class="entitled">
+				Informations importantes
+			</div>
+			<textarea matInput formControlName="important"></textarea>
+		</form>
+	</div>
+	<div class="loading-wrapper">
+		<ng-container *ngIf="main; else notMain">
+			<ng-container *ngIf="survey">
+				<form [formGroup]="survey">
+					<div formArrayName="sections">
+						<mat-accordion [formGroupName]="i" *ngFor="let section of getSections();let i = index">
+					  		<mat-expansion-panel [expanded]="i === 0">
+					    		<mat-expansion-panel-header class="sub-title-element">
+					    			{{getTabTitle(i)}}
+					    		</mat-expansion-panel-header>
+					    		<div class="divider"></div>
+					    		<div formArrayName="fields">
+						    		<div class="question" [formGroupName]="j" *ngFor="let question of getQuestions(section); let j = index">
+										<ng-container *ngIf="checkType(i,j,'text')">
+											<div [ngClass]="{'entitled':true,'required':getLabelTitle(i,j) === 'Prénom' || getLabelTitle(i,j) === 'Nom'}">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value">
+												<input matInput formControlName="value">
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkType(i,j,'textarea')"> 
+											<div class="textarea">
+												{{getLabelTitle(i,j)}}
+												<textarea class="value" matInput formControlName="value"></textarea>
+											</div>
+										</ng-container>
+										<!-- <ng-container *ngIf="checkType(i,j,'tel')">
+											<div class="entitled">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value">
+												<input matInput formControlName="value">
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkType(i,j,'mail')"> 
+											<div class="entitled">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value">
+												<input matInput formControlName="value">
+											</div>
+										</ng-container> -->
+										<ng-container *ngIf="checkType(i,j,'select')"> 
+											<div class="entitled">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value">
+												<mat-select class="select" formControlName="value">
+												    <mat-option *ngFor="let select of getOptions(i,j)" value="{{select}}">
+												    	{{select}}
+												    </mat-option>
+												</mat-select>
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkType(i,j,'checkbox')">
+											<div class="entitled">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value">
+												<mat-checkbox *ngFor="let check of getOptions(i,j)" formControlName="value">{{check}}</mat-checkbox>
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkType(i,j,'radio')"> 
+											<div class="entitled">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value">
+												<mat-radio-group formControlName="value">
+							        				<mat-radio-button *ngFor="let radio of getOptions(i,j)" value="{{radio}}">{{radio}}</mat-radio-button>
+							      				</mat-radio-group>
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkType(i,j,'date')">
+											<div class="entitled">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value-date">
+												<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="day"></span>
+												<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="month"></span>
+												<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="maxLength($event,4)" formControlName="year"></span>
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkType(i,j,'file')">
+											<div class="entitled">
+												{{getLabelTitle(i,j)}}
+											</div>
+											<div class="value-file">
+												<ng-container *ngIf="edit && fileModule; else noFileModule">
+													<input type="hidden" formControlName="value">
+													<input (change)="selectFilesSurvey($event,i,j)" id="file" type="file" multiple style="display: none;">
+													<label class="picker" [ngClass]="{'file-list':getSpecifiedFiles(i,j).length > 0}" for="file">
+														<ng-container *ngIf="getSpecifiedFiles(i,j).length > 0; else noFile">
+															<div class="text-picker">
+																<mat-icon>file_upload</mat-icon>
+																<div>Importer des fichiers</div>
+																<div>Maximum 2MB par fichier</div>
+															</div>
+															<div class="documents">
+																<div class="document panel" *ngFor="let document of getSpecifiedFiles(i,j); let k = index">
+																	<div class="header">
+																		<mat-icon (click)="deleteFileSurvey($event,k,i,j)">delete</mat-icon>
+																	</div>
+																	<div class="document-text">
+																		{{document.name}}
+																	</div>
+																</div>
+															</div>
+														</ng-container>
+														<ng-template #noFile>
+															<div class="text-picker">
+																<mat-icon>file_upload</mat-icon>
+																<div>Importer des fichiers</div>
+																<div>Maximum 2MB par fichier</div>
+															</div>
+														</ng-template>
+													</label>
+												</ng-container>
+												<ng-template #noFileModule>
+													<div class="file-list">
+														<div class="documents">
+															<div class="document panel" *ngFor="let document of getSpecifiedFiles(i,j); let k = index">
+																<div class="header">
+																	<mat-icon *ngIf="document.preview ? (document.file.type === 'application/pdf' || (document.file.type.startsWith('image/') && !document.file.type.includes('svg'))) : (document.mimetype === 'application/pdf' || (document.mimetype.startsWith('image/') && !document.mimetype.includes('svg')))" (click)="showDoc(document)">visibility</mat-icon>
+																	<mat-icon (click)="downloadDoc(document)">download</mat-icon>
+																</div>
+																<div class="document-text">
+																	{{document.name}}
+																</div>
+															</div>
+														</div>
+													</div>
+												</ng-template>
+											</div>
+										</ng-container>
+									</div>
+								</div>
+					    	</mat-expansion-panel>
+					    </mat-accordion>
+					</div>
+					<div *ngIf="!show" class="button submit" [ngClass]="{'disabled':isDisabled() || disabled}" (click)="submitPatient()">
+						Créer la fiche
+					</div>
+				</form>
+			</ng-container>
+		</ng-container>
+		<div class="loading" [ngClass]="{'show':loading}">
+			<mat-spinner *ngIf="!error && !success" [diameter]="50"></mat-spinner>
+			<div *ngIf="error">Une erreur est survenue</div>
+			<div *ngIf="success">Modification prise en compte</div>
+		</div>
+	</div>
+	<ng-template #notMain>
+		<ng-container *ngIf="surveyConsultation">
+			<form [formGroup]="surveyConsultation">
+				<mat-accordion>
+					<mat-expansion-panel [(expanded)]="newConsult">
+						<mat-expansion-panel-header class="sub-title-element">
+			    			Nouvelle consultation
+			    		</mat-expansion-panel-header>
+			    		<div class="divider"></div>
+		    			<div class="elements">
+							<div class="questions-element">
+							    <div class="question" formGroupName="date">
+							    	<div class="entitled required">
+							    		Date de consultation
+							    	</div>
+							    	<div class="value-date">
+									    <span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="day"></span>
+										<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="month"></span>
+										<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="maxLength($event,4)" formControlName="year"></span>
+									</div>
+								</div>
+								<ng-container formArrayName="questions">
+									<div class="question" [formGroupName]="i" *ngFor="let question of getQuestionsConsultation(); let i = index">
+										<ng-container *ngIf="checkTypeNewConsultation(i,'text')">
+											<div class="entitled">
+												{{getLabelTitleNewConsultation(i)}}
+											</div>
+											<div class="value">
+												<input matInput formControlName="value">
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkTypeNewConsultation(i,'textarea')"> 
+											<div class="textarea">
+												{{getLabelTitleNewConsultation(i)}}
+												<textarea matInput formControlName="value"></textarea>
+											</div>
+										</ng-container>
+										<!-- <ng-container *ngIf="checkTypeNewConsultation(i,'tel')">
+											<div class="entitled">
+												{{getLabelTitleNewConsultation(i)}}
+											</div>
+											<div class="value">
+												<input matInput formControlName="value">
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkTypeNewConsultation(i,'mail')"> 
+											<div class="entitled">
+												{{getLabelTitleNewConsultation(i)}}
+											</div>
+											<div class="value">
+												<input matInput formControlName="value">
+											</div>
+										</ng-container> -->
+										<ng-container *ngIf="checkTypeNewConsultation(i,'select')">
+											<div class="entitled">
+												{{getLabelTitleNewConsultation(i)}}
+											</div> 
+											<div class="value">
+												<mat-select class="select" formControlName="value">
+												    <mat-option *ngFor="let select of getOptionsNewConsultation(i)" value="{{select}}">
+												    	{{select}}
+												    </mat-option>
+												</mat-select>
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkTypeNewConsultation(i,'checkbox')">
+											<div class="entitled">
+												{{getLabelTitleNewConsultation(i)}}
+											</div>
+											<div class="value">
+												<ng-container formArrayName="values">
+													<ng-container *ngFor="let check of getOptionsNewConsultation(i);let j = index" [formGroupName]="j">
+														<mat-checkbox formControlName="value">{{check}}</mat-checkbox>
+													</ng-container>
+												</ng-container>
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkTypeNewConsultation(i,'radio')"> 
+											<div class="entitled">
+												{{getLabelTitleNewConsultation(i)}}
+											</div>
+											<div class="value">
+												<mat-radio-group formControlName="value">
+							        				<mat-radio-button *ngFor="let radio of getOptionsNewConsultation(i)" value="{{radio}}">{{radio}}</mat-radio-button>
+							      				</mat-radio-group>
+							      			</div>
+										</ng-container>
+										<ng-container *ngIf="checkTypeNewConsultation(i,'date')">
+											<div class="entitled-date">
+												{{getLabelTitleNewConsultation(i)}}
+											</div>
+											<div class="value-date">
+												<input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="day">
+												<input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="nextInput($event)" formControlName="month">
+												<input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" (input)="maxLength($event,4)" formControlName="year">
+											</div>
+										</ng-container>
+										<ng-container *ngIf="checkTypeNewConsultation(i,'file') && fileModule">
+											<div class="entitled">
+												{{getLabelTitleNewConsultation(i)}}
+											</div>
+											<div class="value-file">
+												<input type="hidden" formControlName="value">
+												<input (change)="selectFilesConsult($event,i)" id="file" type="file" multiple style="display: none;">
+												<label class="picker" [ngClass]="{'file-list':getSpecifiedFilesConsult(i).length > 0}" for="file">
+													<ng-container *ngIf="getSpecifiedFilesConsult(i).length > 0; else noFileConsult">
+														<div class="text-picker">
+															<mat-icon>file_upload</mat-icon>
+															<div>Importer des fichiers</div>
+															<div>Maximum 2MB par fichier</div>
+														</div>
+														<div class="documents">
+															<div class="document panel" *ngFor="let document of getSpecifiedFilesConsult(i); let k = index">
+																<div class="header">
+																	<mat-icon (click)="deleteFileSurveyConsult($event,k,i)">delete</mat-icon>
+																</div>
+																<div class="document-text">
+																	{{document.name}}
+																</div>
+															</div>
+														</div>
+													</ng-container>
+													<ng-template #noFileConsult>
+														<div class="text-picker">
+															<mat-icon>file_upload</mat-icon>
+															<div>Importer des fichiers</div>
+															<div>Maximum 2MB par fichier</div>
+														</div>
+													</ng-template>
+												</label>
+											</div>
+										</ng-container>
+									</div>
+								</ng-container>
+							</div>
+							<div class="divider"></div>
+							<div class="price-element" formGroupName="formPrice">
+								<div class="question">
+									<div class="entitled required">
+										Prix (€)
+									</div>
+									<div class="value">
+										<input matInput (keypress)="numberOnly($event)" formControlName="price">
+									</div>
+								</div>
+								<div class="question">
+									<div class="entitled required">
+										Règlement
+									</div>
+									<div class="value">
+										<mat-select class="select" formControlName="payment">
+										    <mat-option *ngFor="let select of paymentConsultation[1].options" value="{{select}}">
+										    	{{select}}
+										    </mat-option>
+										</mat-select>
+									</div>
+								</div>
+								<div class="question">
+									<div class="entitled">
+										Supplément
+									</div>
+									<div class="value">
+										<ng-container formArrayName="supp">
+											<ng-container *ngFor="let check of paymentConsultation[0].options;let j = index" [formGroupName]="j">
+												<mat-checkbox (change)="changePrix($event,check)" formControlName="value">{{check}}</mat-checkbox>
+											</ng-container>
+										</ng-container>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div (click)="createConsultation()" [ngClass]="{'disabled':isDisabledNewConsult()}" class="button submit consult">
+							Valider la consultation
+						</div>
+					</mat-expansion-panel>
+				</mat-accordion>
+			</form>
+			<mat-accordion *ngFor="let consult of shownConsultations; let i = index">
+				<mat-expansion-panel>
+					<mat-expansion-panel-header class="consultation sub-title-element">
+		    			<mat-icon (click)="supprimer($event,consult.consultation)">delete</mat-icon>
+						<div>
+		    				Consultation du {{consult.consultation.date_consultation | date : 'mediumDate'}}
+		    			</div>
+		    		</mat-expansion-panel-header>
+		    		<div class="divider"></div>
+		    		<div class="elements">
+						<div class="questions-element" [ngClass]="{'center':consult.questions.length === 0}">
+							<ng-container *ngIf="consult.questions.length > 0; else noQuestions">
+								<div class="question" *ngFor="let question of consult.questions; let j = index">
+									<ng-container *ngIf="question.questionType == 'text'">
+										<div class="entitled">
+											{{question.entitled}}
+										</div>
+										<div class="value">
+											<input readonly matInput value="{{question.value}}">
+										</div>
+									</ng-container>
+									<ng-container *ngIf="question.questionType == 'textarea'"> 
+										<div class="textarea">
+											{{question.entitled}}
+											<textarea readonly matInput value="{{question.value}}"></textarea>
+										</div>
+									</ng-container>
+									<!-- <ng-container *ngIf="question.questionType == 'tel'">
+										<div class="entitled">
+											{{question.entitled}}
+										</div>
+										<div class="value">
+											<input readonly matInput value="{{question.value}}">
+										</div>
+									</ng-container>
+									<ng-container *ngIf="question.questionType == 'mail'"> 
+										<div class="entitled">
+											{{question.entitled}}
+										</div>
+										<div class="value">
+											<input readonly matInput value="{{question.value}}">
+										</div>
+									</ng-container> -->
+									<ng-container *ngIf="question.questionType == 'select'"> 
+										<div class="entitled">
+											{{question.entitled}}
+										</div>
+										<div class="value">
+											<input readonly matInput value="{{question.value}}">
+										</div>
+									</ng-container>
+									<ng-container *ngIf="question.questionType == 'checkbox'">
+										<div class="entitled">
+											{{question.entitled}}
+										</div>
+										<div class="value">
+											<mat-checkbox disabled *ngFor="let option of question.options; let i = index" [checked]="question.values[i]">{{option}}</mat-checkbox>
+										</div>
+									</ng-container>
+									<ng-container *ngIf="question.questionType == 'radio'"> 
+										<div class="entitled">
+											{{question.entitled}}
+										</div>
+										<div class="value">
+											<mat-radio-group disabled value="{{question.value}}">
+						        				<mat-radio-button *ngFor="let option of question.options" value="{{option}}">{{option}}</mat-radio-button>
+						      				</mat-radio-group>
+						      			</div>
+									</ng-container>
+									<ng-container *ngIf="question.questionType == 'date'">
+										<div class="entitled-date">
+												{{question.entitled}}
+										</div>
+										<div class="value-date">
+											<input matInput readonly value="{{question.value[0]}}">
+											<input matInput readonly value="{{question.value[1]}}">
+											<input matInput readonly value="{{question.value[2]}}">
+										</div>
+									</ng-container>
+									<ng-container *ngIf="question.questionType == 'file'">
+										<div class="entitled">
+											{{question.entitled}}
+										</div>
+										<div class="value-file">
+											<div class="file-list">
+												<div class="documents">
+													<div class="document panel" *ngFor="let document of question.value">
+														<div class="header">
+															<mat-icon *ngIf="(document.mimetype === 'application/pdf' || (document.mimetype.startsWith('image/') && !document.mimetype.includes('svg')))" (click)="showDoc(document)">visibility</mat-icon>
+															<mat-icon (click)="downloadDoc(document)">download</mat-icon>
+														</div>
+														<div class="document-text">
+															{{document.name}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</ng-container>
+								</div>
+							</ng-container>
+							<ng-template #noQuestions>
+								Vous n'avez enregistré aucune information pour cette consultation
+							</ng-template>
+						</div>
+						<div class="divider"></div>
+						<div class="price-element">
+							<div class="question">
+								<div class="entitled">
+									Prix (€)
+								</div>
+								<div class="value">
+									<input matInput readonly value="{{consult.consultation.total}}">
+								</div>
+							</div>
+							<div class="question">
+								<div class="entitled">
+									Règlement
+								</div>
+								<div class="value">
+									<input matInput readonly value="{{consult.questionsPrice[1].value}}">
+								</div>
+							</div>
+							<div class="question">
+								<div class="entitled">
+									Supplément
+								</div>
+								<div class="value">
+									<ng-container *ngFor="let check of consult.questionsPrice[0].options; let i = index">
+										<mat-checkbox [checked]="consult.questionsPrice[0].values[i]" disabled>{{check}}</mat-checkbox>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+					</div>
+					<ng-container *ngIf="!consult.consultation.facture && invoiceModule">
+						<div class="button submit consult" (click)="addConsultFacture(consult)">
+							Créer une facture
+						</div>
+					</ng-container>
+				</mat-expansion-panel>
+			</mat-accordion>
+		</ng-container>
+	</ng-template>
+</div>

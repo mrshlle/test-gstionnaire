@@ -1,0 +1,95 @@
+.modification-container{
+	--color:red;
+	--text-color:red;
+	position: relative;
+	overflow: hidden;
+}
+
+.modification-container .loading{
+	position: absolute;
+	top:0;
+	right:0;
+	left:0;
+	bottom:0;
+	z-index: 10;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	background-color: var(--color);
+	border-radius:10px;
+	transform: translateY(101%);
+	transition: transform 0.2s;
+	color:var(--text-color);
+}
+
+.modification-container .loading.show{
+	transform: translateY(0);
+}
+
+:host ::ng-deep .modification-container .loading .mat-mdc-progress-spinner circle{
+	stroke:var(--text-color);
+}
+
+.modification-container .button.remove{
+	background-color: #df0000;
+	color: white;
+	margin-right: 20px;
+	width: max-content;
+}
+
+.modification-container .button.add, .modification-container .button.save{
+	background-color: var(--color);
+	color:var(--text-color);
+	margin-top: 20px;
+}
+
+.modification-container .button.save{
+	padding:20px;
+	float:right;
+}
+
+.modification-container  .divider{
+	height: 1px;
+	background-color: #ececec;
+}
+
+.modification-container  .question .fields-wrapper{
+	display: flex;
+	align-items:center;
+	gap:20px;
+	margin-top:20px;
+}
+
+.modification-container  .question .fields-wrapper:not(:first-child){
+	margin-top: 20px;
+}
+
+.modification-container  .question .fields-wrapper .field{
+	flex:1;
+}
+
+.modification-container  .field .value input, .modification-container .question .fields-wrapper .field .value .mat-mdc-select, .modification-container  .question .chips-wrapper input{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:calc(100% - 20px);
+	padding: 10px;
+}
+
+.modification-container  .field .label{
+	margin-bottom: 5px;
+}
+
+.modification-container  .question .fields-wrapper .field .value .mat-mdc-select{
+	padding:0;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+:host ::ng-deep .modification-container  .question .fields-wrapper .field .value .mat-mdc-select .mat-select-trigger{
+	padding:10px;
+	height:auto;
+}
+
+.modification-container  .question .chips-wrapper{
+	margin-top: 10px;
+}

@@ -1,0 +1,940 @@
+.home-container{
+	position: relative;
+	--color:red;
+	--fade-color:red;
+	--sup-color:red;
+	--sub-color:red;
+	--text-color:red;
+}
+
+.home-container .shown-event{
+	--clientX:0;
+	--clientY:0;
+	position: fixed;
+	top:var(--clientY);
+	left:var(--clientX);
+	height: 150px;
+	padding: 5px;
+	border-radius:5px;
+	box-shadow: 0 0 10px #0003;
+	background-color: white;
+	width:calc(((100% - 52px)/7)*2.5);
+	max-width: 350px;
+	min-width: 200px;
+	z-index: -10;
+	opacity: 0;
+	transition: all 0.5s;
+	display: flex;
+	flex-direction: column;
+	transform: translate(calc(-100% - 10px), calc(-100% - 10px));
+}
+
+@keyframes fadein{
+	0% {
+		z-index: 41;
+	}
+	100% {
+		z-index: 41;
+		opacity: 1;
+	}
+}
+
+.home-container .shown-event.show{
+	animation: fadein 0.3s forwards;
+}
+
+.home-container .shown-event .header{
+	text-align: right;
+}
+
+.home-container .shown-event .header mat-icon{
+	height: 20px;
+	width:20px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.home-container .shown-event .title{
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+.home-container .shown-event .event-hours{
+	margin-bottom: 5px;
+}
+
+.home-container .shown-event .note{
+	overflow: auto;
+}
+
+:host ::ng-deep .home-container .mat-mdc-progress-spinner circle{
+	stroke:var(--color);
+}
+
+.home-container .container-title .title-text:after{
+	background-color: var(--color);
+}
+
+.home-container .panel{
+	padding: 0;
+	display: flex;
+	position: relative;
+}
+
+.home-container .panel .new-event{
+	position: absolute;
+	top:0;
+	bottom: 0;
+	right: 0;
+	left:0;
+	z-index: 35;
+	background-color: white;
+	visibility: hidden;
+	opacity: 0;
+	transition: all 0.2s;
+	display: block;
+	overflow: auto;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.home-container .panel .new-event.show{
+	visibility: visible;
+	opacity: 1;
+}
+
+.home-container .panel .new-event form{
+	position: relative;
+	width: 100%;
+}
+
+.home-container .panel .new-event form .title{
+	display: flex;
+	align-items: center;
+}
+
+.home-container .panel .new-event form .title .sub-title-element{
+	flex:1;
+}
+
+.home-container .panel .new-event form .divider{
+	margin:20px;
+	height: 1px;
+	background-color: #ececec;
+}
+
+.home-container .panel .new-event form .blur{
+	filter:blur(2px);
+}
+
+.home-container .panel .new-event form .loading-panel{
+	position: absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+
+.home-container .panel .new-event form .loading-panel{
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+}
+
+.home-container .panel .new-event form .loading-panel .error{
+	color:#df0000;
+}
+
+.home-container .panel .new-event form .loading-panel .success{
+	color:#00df00;
+}
+
+.home-container .panel .new-event form .loading-panel .spinner{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.home-container .panel .new-event .field:not(:last-child){
+	margin-bottom: 10px;
+}
+
+.home-container .panel .new-event .field .label{
+	width: max-content;
+}
+
+.home-container .panel .new-event .field .label.transparent{
+	color:transparent;
+}
+
+.home-container .panel .new-event .field .label.required{
+	position: relative;
+}
+
+.home-container .panel .new-event .field .label.required:after{
+	content:'*';
+	color:#d25656;
+	font-size:12px;
+	position: absolute;
+	right:-10px;
+	top:0;
+}
+
+.home-container .panel .new-event .field .value input, .home-container .panel .new-event .field .value .mat-mdc-select, .home-container .panel .new-event .field .value textarea{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:100%;
+	padding: 10px;
+}
+
+.home-container .panel .new-event .field .value textarea{
+	resize:none;
+	height:80px;
+}
+
+.home-container .panel .new-event .field .value .mat-mdc-select{
+	padding:0;
+	width:100%;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+:host ::ng-deep .home-container .panel .new-event .field .value .mat-mdc-select .mat-select-trigger{
+	padding:10px;
+	height:auto;
+}
+
+.home-container .panel .new-event .field .value input:focus, .home-container .panel .new-event .field .value .mat-mdc-select:focus{
+	border-color: #cecece;
+}
+
+.home-container .panel .new-event .field .value.wrapper{
+	position: relative;
+}
+
+.home-container .panel .new-event .field .value.wrapper .hint{
+	position: absolute;
+	font-size: 10px;
+	bottom: 1px;
+	right: 2px;
+}
+
+.home-container .panel .new-event .field .record.value{
+	display: flex;
+	align-items: center;
+	gap:20px;
+}
+
+.home-container .panel .new-event .field .date-value{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	border: 1px solid #ececec;
+	border-radius: 5px;
+}
+
+.home-container .panel .new-event .field .date-value span{
+	width:90%;
+	position: relative;
+}
+
+.home-container .panel .new-event .field .date-value input{
+	border: none;
+	padding:10px;
+	background-color:transparent;
+	width: 100%;
+}
+
+.home-container .panel .new-event .field .date-value span:not(:last-child):after{
+	position: absolute;
+	content: '/';
+	right: -9%;
+	bottom: 50%;
+	transform: translateY(50%);
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .home-container .panel .new-event .field .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+    background:var(--color);
+}
+
+.home-container .panel .new-event .double-field{
+	display: flex;
+	gap:10px;
+}
+
+.home-container .panel .new-event .double-field .field{
+	flex:1;
+}
+
+.home-container .panel .new-event .button{
+	background-color: var(--color);
+	color:var(--text-color);
+	float: right;
+	margin-left:5px;
+}
+
+.home-container .panel .new-event .button.disabled{
+	background-color: #ececec;
+	color:#cecece;
+	cursor: default;
+}
+
+.home-container .panel .new-event mat-icon.disabled{
+	color: #cecece;
+}
+
+.home-container .panel .info{
+	padding:20px;
+	flex:1;
+	background-color: #ececec;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+.home-container .panel .button.chevron{
+	padding:5px;
+}
+
+.home-container .panel .wait-information{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.home-container .panel .info .calendar-title{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.home-container .panel .info .calendar-title .month{
+	font-weight: bold;
+}
+
+.home-container .panel .info .calendar-title .actions{
+	display: flex;
+}
+
+.home-container .panel .info .calendar-title .actions .button{
+	border: 1px solid #cecece;
+}
+
+.home-container .panel .info .calendar-title .actions .button:last-child{
+	margin-left: 10px;
+}
+
+.home-container .panel .button mat-icon{
+	height: 20px;
+	width: 20px;
+	font-size: 20px;
+}
+
+.home-container .panel .info .day-of-week, .home-container .panel .info .date-grid{
+	display: grid;
+	grid-template-columns: repeat(7,1fr);
+	text-align: center;
+}
+
+.home-container .panel .info .day-of-week > div, .home-container .panel .info .date-grid > div{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 30px;
+	width: 30px;
+}
+
+.home-container .panel .info .date-grid > div{
+	position: relative;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.home-container .panel .info .date-grid > div:hover{
+	background-color: #DEDFDF;
+}
+
+.home-container .panel .info .date-grid .today{
+	border:1px solid #cecece;
+}
+
+.home-container .panel .info .date-grid .not-month{
+	color:#cecece;
+}
+
+.home-container .panel .info .date-grid .events-day{
+	position: relative;
+}
+
+.home-container .panel .info .date-grid .events-day:after{
+	position: absolute;
+	top:0;
+	right:0;
+	content: '';
+	height:5px;
+	width:5px;
+	border-radius: 50%;
+	background-color: var(--sup-color);
+}
+
+.home-container .panel .info .date-grid .today.selected{
+	border:0;
+}
+
+.home-container .panel .info .date-grid .selected{
+	background-color: var(--sub-color);
+	color:var(--text-color);
+}
+
+.home-container .panel .info .date-grid .selected:hover{
+	background-color: var(--sub-color);
+}
+
+.home-container .panel .info .button.new{
+	background-color: var(--color);
+	color:var(--text-color);
+	width: 100%;
+	margin-top: 20px;
+	justify-content: center;
+}
+
+.home-container .panel .calendar{
+	flex:3;
+	padding: 20px;
+}
+
+.home-container .panel .calendar .button{
+	background-color: var(--color);
+	color:var(--text-color);
+}
+
+.home-container .panel .calendar .action-elements{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+.home-container .panel .calendar .action-elements .move{
+	display: flex;
+}
+
+.home-container .panel .calendar .action-elements .move .button:not(:last-child){
+	margin-right: 10px;
+}
+
+.home-container .panel .calendar .action-elements .type{
+	background-color: var(--fade-color);
+	border-radius: 5px;
+	padding:2px;
+	display: flex;
+	justify-content: space-between;
+	height: 34px;
+	position: relative;
+}
+
+.home-container .panel .calendar .action-elements .type .element{
+	width: 100px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1;
+	cursor: pointer;
+}
+
+.home-container .panel .calendar .action-elements .type .animated{
+	position: absolute;
+	height: calc(100% - 4px);
+	top: 2px;
+	left: 2px;
+	width: calc(50% - 2px);
+	z-index: 0;
+	transition: all .5s ease 0s;
+	border-radius: 5px;
+	background-color: white;
+}
+
+.home-container .panel .calendar .action-elements .type .element.week.active~.animated{
+	left:2px;
+}
+
+.home-container .panel .calendar .action-elements .type .element.month.active~.animated{
+	left:50%;
+}
+
+.home-container .panel .calendar .events{
+	position: relative;
+}
+
+.home-container .panel .calendar .events > div{
+	display: grid;
+	grid-template-columns: 52px repeat(7,minmax(0,1fr));
+	position: relative;
+	transition: grid-template-columns 0.2s;
+}
+
+.home-container .panel .calendar .events .days{
+	grid-template-columns: 52px repeat(7,minmax(0,1fr)) auto;
+}
+
+.home-container .panel .calendar .events.months > div{
+	grid-template-columns: repeat(7,minmax(0,1fr));
+}
+
+.home-container .panel .calendar .events.months .days{
+	grid-template-columns: 0 repeat(7,minmax(0,1fr)) auto;
+}
+
+
+.home-container .panel .calendar .events .days .day{
+	visibility: hidden;
+	opacity: 0;
+	transition: all 0.2s;
+}
+
+.home-container .panel .calendar .events .days .day.show{
+	visibility: visible;
+	opacity: 1;
+}
+
+.home-container .panel .calendar .events .scroll-element{
+	overflow: scroll;
+	visibility: hidden;
+}
+
+.home-container .panel .calendar .events .days > div{
+	border-bottom: 2px solid #ececec;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+}
+
+.home-container .panel .calendar .events .days > div:not(:last-child):after{
+	content: '';
+	height: 20px;
+	width: 2px;
+	background-color: #ececec;
+	top:15px;
+	right: -1px;
+	position: absolute;
+}
+
+.home-container .panel .calendar .events .days .today{
+	font-weight: bold;
+	color:var(--color);
+}
+
+.home-container .panel .calendar .events .multiple-days-events{
+	grid-template-columns: 52px repeat(7,minmax(0,1fr)) auto;
+	border-bottom: 2px solid #ececec;
+}
+
+.home-container .panel .calendar .events .multiple-days-events .toggle-element{
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+}
+
+.home-container .panel .calendar .events .multiple-days-events .toggle-element .toggle-collapse{
+	cursor: pointer;
+	transition: transform 0.2s;
+}
+
+.home-container .panel .calendar .events .multiple-days-events .toggle-element .toggle-collapse.rotate{
+	transform: rotate(180deg);
+}
+
+.home-container .panel .calendar .events .multiple-events{
+	--height:0;
+	height:calc(24px*var(--height) + 2px*var(--height) + 4px);
+	max-height:calc(24px*var(--height) + 2px*var(--height) + 4px);
+	overflow:hidden;
+	transition:max-height 0.2s;
+	grid-column: 2/span 7;
+	position: relative;
+	border-left:1px solid #ececec;
+	border-right:1px solid #ececec;
+}
+
+.home-container .panel .calendar .events .multiple-events.collapsed{
+	max-height:28px;
+}
+
+.home-container .panel .calendar .events .month-events{
+	position: absolute;
+	width: 100%;
+	height: calc(100% - 40px);
+	top:17px;
+	overflow: hidden;
+}
+
+.home-container .panel .calendar .events .multiple-events .multiple-event, .home-container .panel .calendar .events .month-events .month-event{
+	--starting-day:0;
+	--ending-day:0;
+	--width:0;
+	--index:0;
+	position: absolute;
+	background-color: var(--sub-color);
+	border-radius: 3px;
+	width: calc((100%/7)*var(--width) - 4px);
+	left: calc(var(--starting-day)*100%/7 + 2px);
+	top: calc(var(--index)*24px + var(--index)*2px + 2px);
+	height: 24px;
+	z-index: 10;
+	color:var(--text-color);
+	padding: 3px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
+	transition: box-shadow 0.2s;
+}
+
+.home-container .panel .calendar .events .month-events .month-event:hover, .home-container .panel .calendar .events .month-events .month-event.active{
+	box-shadow: 0 0 10px #0003;
+	z-index: 15;
+}
+
+.home-container .panel .calendar .events .month-events .month-event .title{
+	width: max-content;
+}
+
+.home-container .panel .calendar .events .multiple-events .multiple-event:hover, .home-container .panel .calendar .events .multiple-events .multiple-event.active{
+	box-shadow: 0 0 10px #0003;
+	z-index: 15;
+}
+
+.home-container .panel .calendar .events .hours > div{
+	height: 100px;
+}
+
+.home-container .panel .calendar .events .hours{
+	height: calc(100vh - 400px);
+	overflow: auto;
+}
+
+.home-container .panel .calendar .events .hours .current-hour{
+	--hour:0;
+	--minute:0;
+	height: 1px;
+	width: calc(100% - 52px);
+	position: absolute;
+	right: 0;
+	background-color: red;
+	top:calc(var(--hour)*100px + (100px/60)*var(--minute) + 10px);
+	z-index:30;
+	transition:top 60s;
+}
+
+.home-container .panel .calendar .events .hours .current-hour:before{
+	content:'';
+	position: absolute;
+	height: 10px;
+	width: 10px;
+	border-radius: 25px;
+	background-color: red;
+	left:0;
+	top:0;
+	transform: translate(-50%, -50%);
+	z-index: 30;
+}
+
+.home-container .panel .calendar .events .hours .event{
+	--day:0;
+	--start:0;
+	--height:0;
+	--index:0;
+	--division:1;
+	border: 0px;
+	position: absolute;
+	background-color: var(--sub-color);
+	border-radius: 3px;
+	width: calc(((100% - 52px)/7)/var(--division) - 5px);
+	left: calc(55px + var(--day)*(100% - 52px)/7 + var(--index)*((100% - 52px)/7)/var(--division));
+	top: calc(var(--start)*100px + 12px);
+	height: calc(var(--height)*100px - 5px);
+	z-index: 10;
+	color:var(--text-color);
+	padding: 3px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
+	transition: box-shadow 0.2s;
+}
+
+.home-container .panel .calendar .events .hours .event:hover, .home-container .panel .calendar .events .hours .event.active{
+	box-shadow: 0 0 10px #0003;
+	z-index: 15;
+}
+
+.home-container .panel .calendar .events .hours .event .title{
+	width: max-content;
+	flex:1;
+}
+
+.home-container .panel .calendar .events .hours .event .link{
+	padding:2px;
+	background-color: var(--color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.home-container .panel .calendar .events .hours .event .link mat-icon{
+	height: 18px;
+	width: 18px;
+	font-size: 18px;
+}
+
+.home-container .panel .calendar .events .hours .event .time{
+	font-size: 10px;
+}
+
+.home-container .panel .calendar .events .hours .separation{
+	grid-column: 1/span 8;
+	height: 10px;
+}
+
+.home-container .panel .calendar .events .hours .hour-element{
+	position: relative;
+}
+
+.home-container .panel .calendar .events .hours .hour-element .hour{
+	position: absolute;
+	top:0;
+	color:#cecece;
+	right: 5px;
+	transform: translateY(-50%);
+}
+
+.home-container .panel .calendar .events .hours .hour-element .quarter, .home-container .panel .calendar .events .hours .hour-element .medium{
+	position: absolute;
+	height: 1px;
+	background-color: #ececec;
+	right: 0;
+}
+
+.home-container .panel .calendar .events .hours .hour-element .quarter{
+	width: 20px;
+}
+
+.home-container .panel .calendar .events .hours .hour-element .medium{
+	width: 35px;
+	top:49px;
+}
+
+.home-container .panel .calendar .events .hours .hour-element .first{
+	top:24px;
+}
+
+.home-container .panel .calendar .events .hours .hour-element .second{
+	top:74px;
+}
+
+.home-container .panel .calendar .events .hours .day-element{
+	border-left:1px solid #ececec;
+	border-bottom: 1px solid #ececec;
+	position: relative;
+}
+
+.home-container .panel .calendar .events .hours .day-element > div{
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	background: repeating-linear-gradient(to right, #ececec 0, #ececec 5px, white 5px, white 10px);
+}
+
+.home-container .panel .calendar .events .hours .day-element .first{
+	top:24px;
+}
+
+.home-container .panel .calendar .events .hours .day-element .second{
+	top:49px;
+}
+
+.home-container .panel .calendar .events .hours .day-element .third{
+	top:74px;
+}
+
+.home-container .panel .calendar .events.months .hours{
+	display: block;
+}
+
+.home-container .panel .calendar .events.months .hours .week{
+	display: grid;
+	grid-template-columns: repeat(7,minmax(0,1fr));
+	position: relative;
+}
+
+.home-container .panel .calendar .events.months .hours .day{
+	border-left:1px solid #ececec;
+	border-bottom: 1px solid #ececec;
+	display: flex;
+	flex-direction: column;
+}
+
+.home-container .panel .calendar .events.months .hours .day .day-number{
+	text-align: center;
+	flex:1;
+}
+
+.home-container .panel .calendar .events.months .hours .day .day-number.today{
+	font-weight: bold;
+	color:var(--color);
+}
+
+.home-container .panel .calendar .events.months .hours .day .more{
+	text-align: center;
+	margin:2px;
+	padding:2px;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.home-container .panel .calendar .events.months .hours .day .more:hover{
+	background-color: #0000000a;
+}
+
+.home-container .panel .calendar .events.months .hours .preview-month-events{
+	--i:0;
+	--j:0;
+	position: absolute;
+	background-color: white;
+	border-radius: 5px;
+	width: calc(100%/7 + 10px);
+	box-shadow:0 0 10px #0003;
+	height: 110px;
+	z-index: 40;
+	display: flex;
+	flex-direction: column;
+	padding:5px;
+	top:calc(var(--i)*100px - 5px);
+	left:calc(var(--j)*(100%/7) - 5px);
+}
+
+.home-container .panel .calendar .events.months .hours .preview-month-events.top{
+	top:5px;
+}
+
+.home-container .panel .calendar .events.months .hours .preview-month-events.left{
+	left:5px;
+}
+
+.home-container .panel .calendar .events.months .hours .preview-month-events.right{
+	left:calc(var(--j)*(100%/7) - 15px);
+}
+
+.home-container .panel .calendar .events.months .hours .preview-month-events.bottom{
+	top:calc(var(--i)*100px - 15px);
+}
+
+.home-container .panel .calendar .events.months .preview-month-events .header{
+	text-align: center;
+	position: relative;
+}
+
+.home-container .panel .calendar .events.months .preview-month-events .header .close{
+	position: absolute;
+	top:0;
+	right:0;
+	cursor: pointer;
+	width: 15px;
+	height: 15px;
+	font-size: 15px;
+}
+
+.home-container .panel .calendar .events.months .preview-month-events .month-preview-events{
+	flex:1;
+	overflow: auto;
+	scrollbar-width:thin;
+}
+
+.home-container .panel .calendar .events.months .preview-month-events .month-preview-events .month-preview-event{
+	background-color: var(--sub-color);
+	border-radius: 3px;
+	width: 100%;
+	height: 24px;
+	color:var(--text-color);
+	padding: 3px;
+	cursor: pointer;
+	transition: box-shadow 0.2s;
+	margin-top:2px;
+	margin-bottom:2px;
+	overflow: hidden;
+}
+
+.home-container .panel .calendar .events.months .preview-month-events .month-preview-events .month-preview-event .title{
+	width: max-content;
+}
+
+.home-container .panel .calendar .events.months .preview-month-events .month-preview-events .month-preview-event:hover, .home-container .panel .calendar .events.months .preview-month-events .month-preview-events .month-preview-event.active{
+	box-shadow: 0 0 10px #0003;
+	z-index: 15;
+}
+
+.home-container .panel .calendar .events .days .less{
+	display: none;
+}
+
+@media screen and (max-width: 1250px){
+	.home-container .panel{
+		flex-direction: column;
+	}
+
+	.home-container .panel .info{
+		border-bottom-left-radius: 0px;
+		border-top-right-radius: 10px;
+		display: flex;
+	}
+
+	.home-container .panel .info .button.new{
+		margin-top: 0;
+		margin-left: 20px;
+		height: max-content;
+	}
+}
+
+@media screen and (max-width: 700px){
+	.home-container .panel .calendar .events .days .less{
+		display: block;
+	}
+
+	.home-container .panel .calendar .events .days .more{
+		display: none;
+	}
+}
+
+@media screen and (max-width: 500px){
+	.home-container .shown-event{
+		left:50%;
+		transform: translateY(calc(-100% - 10px)) translateX(-50%);
+	}
+
+	.home-container .panel .calendar .action-elements{
+		flex-direction: column;
+		align-items: start;
+	}
+
+	.home-container .panel .calendar .action-elements .move{
+		margin-bottom: 20px;
+	}
+
+	.home-container .panel .info{
+		display: block;
+	}
+
+	.home-container .panel .info .button.new{
+		margin-top: 20px;
+		margin-left: 0;
+	}
+}

@@ -1,0 +1,73 @@
+.input-wrap{
+	position: relative;
+}
+
+.input-wrap .hint{
+	position: absolute;
+	bottom: -15px;
+	right:0;
+	font-size: 12px;
+	color:grey;
+}
+
+::ng-deep .classic .mat-mdc-dialog-container{
+	width:553px;
+	padding:0;
+	position: relative;
+	overflow: hidden;
+	margin:10px;
+	border-radius: 10px;
+	border-top:10px solid #ececec;
+}
+
+.modal-container{
+	min-height:300px;
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	padding:24px;
+}
+
+.modal-container .close{
+	position: absolute;
+	top:5px;
+	right:5px;
+	cursor: pointer;
+}
+
+.modal-container .title{
+	flex:1;
+}
+
+.modal-container .content{
+	flex:2;
+	display: flex;
+	align-items: center;
+}
+
+.modal-container input{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:100%;
+	padding: 10px;
+}
+
+.modal-container .actions{
+	flex:1;
+	display: flex;
+	align-items: flex-end;
+	justify-content:flex-end;
+}
+
+.modal-container .actions .disabled{
+	color:grey;
+	cursor: default;
+}
+
+.modal-container .actions > div{
+	display: inline-block;
+	margin-left: 10px;
+	cursor: pointer;
+}

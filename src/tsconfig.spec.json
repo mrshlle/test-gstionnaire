@@ -1,0 +1,27 @@
+{
+  "extends": "../tsconfig.json",
+  "angularCompilerOptions": {
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "types": []
+  },
+  "compilerOptions": {
+    "outDir": "../out-tsc/spec",
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "types": [
+      "jasmine"
+    ]
+  },
+  "files": [
+    "test.ts",
+    "polyfills.ts",
+    "../node_modules/@types/node/index.d.ts"
+  ],
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ]
+}

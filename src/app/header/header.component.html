@@ -1,0 +1,124 @@
+<div [style.--rgbcolor]="patientService.rgbColors[patientService.user.color]" [style.--color]="patientService.mainColors[patientService.user.color]" class="menu">
+    <div class="logo">
+        <img src="assets/Simple logo.svg">
+    </div>
+    <ul>
+        <li [ngClass]="{'active':patientService.route === 'dashboard'}"><mat-icon (click)="move('dashboard','dashboard')">dashboard</mat-icon><div class="content">Tableau de bord</div></li>
+        <li *ngIf="quickAccess.includes(0)" [ngClass]="{'active':patientService.route === 'home'}"><mat-icon (click)="move('home','accueil')">calendar_month</mat-icon><div class="content">Agenda</div></li>
+        <li *ngIf="quickAccess.includes(1)" [ngClass]="{'active':patientService.route === 'patient'}"><mat-icon (click)="move('patient','nouveau')">person_add</mat-icon><div class="content">Nouvelle fiche</div></li>
+        <li *ngIf="quickAccess.includes(2)" [ngClass]="{'active':patientService.route === 'list'}"><mat-icon (click)="move('list','liste')">list</mat-icon><div class="content">Liste</div></li>
+        <li *ngIf="facture && quickAccess.includes(3)" [ngClass]="{'active':patientService.route === 'invoice'}"><mat-icon (click)="move('invoice','facture')">receipt</mat-icon><div class="content">Facturation</div></li>
+        <li *ngIf="accountancy && quickAccess.includes(4)" [ngClass]="{'active':patientService.route === 'compta'}"><mat-icon (click)="move('compta','compta')">bar_chart</mat-icon><div class="content">Comptabilité simplifiée</div></li>
+        <li *ngIf="share && quickAccess.includes(5)" [ngClass]="{'active':patientService.route === 'share-place'}"><mat-icon (click)="move('share-place','share-place')">folder_shared</mat-icon><div class="content">Espaces partagés</div></li>
+        <li class="separator"></li>
+        <li><mat-icon (click)="toggleModules()">apps</mat-icon><div class="content">Modules</div></li>
+        <li [ngClass]="{'active':patientService.route === 'param'}"><mat-icon (click)="move('param','parametre')">settings</mat-icon><div class="content">Paramètres</div></li>
+    </ul>
+    <div class="logout">
+        <mat-icon (click)="toDeconnexion()">logout</mat-icon>
+        <div class="content">Déconnexion</div>
+    </div>
+    <div class="modules" [ngClass]="{'active':showModules}">
+        <div class="fade-logo">
+            <img src="assets/Logo no bg.svg">
+        </div>
+        <mat-icon *ngIf="!edit" class="back" (click)="toggleModules()">close</mat-icon>
+        <mat-icon *ngIf="!edit" class="settings" (click)="configureQuickAccess()">settings</mat-icon>
+        <div *ngIf="edit" class="configure">
+            <div class="title-element">
+                Configuration des accès rapides
+            </div>
+            <div class="buttons">
+                <mat-icon [ngClass]="{'loading':loading}" (click)="cancel()">close</mat-icon>
+                <mat-spinner [diameter]="25" *ngIf="loading"></mat-spinner>
+                <mat-icon *ngIf="!loading" (click)="saveQuickAccess()">check</mat-icon>
+            </div>
+        </div>
+        <div class="module" [ngClass]="{'active':patientService.route === 'dashboard'}">
+            <div class="icon">
+                <div *ngIf="edit" class="layout">
+                    <mat-checkbox disabled checked></mat-checkbox>
+                </div>
+                <mat-icon (click)="move('dashboard','dashboard')">dashboard</mat-icon>
+            </div>
+            <div class="content sub-title-element">Tableau de bord</div>
+        </div>
+        <div class="module" [ngClass]="{'active':patientService.route === 'home'}">
+            <div class="icon">
+                <div *ngIf="edit" class="layout">
+                    <mat-checkbox [disabled]="(quickAccess.length === 3) && (!quickAccess.includes(0))" [checked]="quickAccess.includes(0)" (change)="checkAccess(0,$event)"></mat-checkbox>
+                </div>
+                <mat-icon (click)="move('home','accueil')">calendar_month</mat-icon>
+            </div>
+            <div class="content sub-title-element">Agenda</div>
+        </div>
+        <div class="module" [ngClass]="{'active':patientService.route === 'patient'}">
+            <div class="icon">
+                <div *ngIf="edit" class="layout">
+                    <mat-checkbox [disabled]="(quickAccess.length === 3) && (!quickAccess.includes(1))" [checked]="quickAccess.includes(1)" (change)="checkAccess(1,$event)"></mat-checkbox>
+                </div>
+                <mat-icon (click)="move('patient','nouveau')">person_add</mat-icon>
+            </div>
+            <div class="content sub-title-element">Nouvelle fiche</div>
+        </div>
+        <div class="module" [ngClass]="{'active':patientService.route === 'list'}">
+            <div class="icon">
+                <div *ngIf="edit" class="layout">
+                    <mat-checkbox [disabled]="(quickAccess.length === 3) && (!quickAccess.includes(2))" [checked]="quickAccess.includes(2)" (change)="checkAccess(2,$event)"></mat-checkbox>
+                </div>
+                <mat-icon (click)="move('list','liste')">list</mat-icon>
+            </div>
+            <div class="content sub-title-element">Liste</div>
+        </div>
+        <div class="module" *ngIf="facture" [ngClass]="{'active':patientService.route === 'invoice'}">
+            <div class="icon">
+                <div *ngIf="edit" class="layout">
+                    <mat-checkbox [disabled]="(quickAccess.length === 3) && (!quickAccess.includes(3))" [checked]="quickAccess.includes(3)" (change)="checkAccess(3,$event)"></mat-checkbox>
+                </div>
+                <mat-icon (click)="move('invoice','facture')">receipt</mat-icon>
+            </div>
+            <div class="content sub-title-element">Facturation</div>
+        </div>
+        <div class="module" *ngIf="accountancy" [ngClass]="{'active':patientService.route === 'compta'}">
+            <div class="icon">
+                <div *ngIf="edit" class="layout">
+                    <mat-checkbox [disabled]="(quickAccess.length === 3) && (!quickAccess.includes(4))" [checked]="quickAccess.includes(4)" (change)="checkAccess(4,$event)"></mat-checkbox>
+                </div>
+                <mat-icon (click)="move('compta','compta')">bar_chart</mat-icon>
+            </div>
+            <div class="content sub-title-element">Comptabilité simplifiée</div>
+        </div>
+        <div class="module" *ngIf="share" [ngClass]="{'active':patientService.route === 'share-place'}">
+            <div class="icon">
+                <div *ngIf="edit" class="layout">
+                    <mat-checkbox [disabled]="(quickAccess.length === 3) && (!quickAccess.includes(5))" [checked]="quickAccess.includes(5)" (change)="checkAccess(5,$event)"></mat-checkbox>
+                </div>
+                <mat-icon (click)="move('share-place','share-place')">folder_shared</mat-icon>
+            </div>
+            <div class="content sub-title-element">Espaces partagés</div>
+        </div>
+    </div>
+</div>
+<div [ngClass]="{'menu-elements':true,'show':show}">
+    <div [ngClass]="{'active':patientService.route === 'dahboard'}" (click)="move('dashboard','dashboard')">Tableau de bord</div>
+    <div [ngClass]="{'active':patientService.route === 'home'}" (click)="move('home','accueil')">Agenda</div>
+    <div [ngClass]="{'active':patientService.route === 'patient'}" (click)="move('patient','nouveau')">Nouvelle fiche</div>
+    <div [ngClass]="{'active':patientService.route === 'list'}" (click)="move('list','liste')">Liste</div>
+    <div *ngIf="facture" [ngClass]="{'active':patientService.route === 'invoice'}" (click)="move('invoice','facture')">Facturation</div>
+    <div *ngIf="accountancy" [ngClass]="{'active':patientService.route === 'compta'}" (click)="move('compta','compta')">Comptabilité simplifiée</div>
+    <div *ngIf="share" [ngClass]="{'active':patientService.route === 'share-place'}" (click)="move('share-place','share-place')">Espaces partagés</div>
+    <div [ngClass]="{'active':patientService.route === 'param'}" (click)="move('param','parametre')">Paramètres</div>
+</div>
+<div [style.--rgbcolor]="patientService.rgbColors[patientService.user.color]" [ngClass]="{'mobile-menu':true,'show':show}">
+    <div class="main-elements">
+        <div class="button-burger" (click)="toggleMenu()">
+            <div [ngClass]="{'burger':true,'show':show}"></div>
+        </div>
+        <div class="logo">
+            <img src="assets/Simple logo.svg">
+        </div>
+        <div class="logout">
+            <mat-icon (click)="toDeconnexion()">logout</mat-icon>
+        </div>
+    </div>
+</div>

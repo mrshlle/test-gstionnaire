@@ -1,0 +1,196 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@font-face {
+    font-family: "LGC";
+    src: url("./assets/fonts/louis_george_cafe/Louis_George_Cafe.ttf") format("truetype");
+}
+
+*, html, body {margin: 0; padding: 0; border: 0; vertical-align: baseline;font-family:'LGC';}
+html {box-sizing: border-box;}
+*, *:before, *:after {box-sizing: inherit;}
+
+.flex-page{
+  min-width: 300px;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+input,select,textarea,button{
+  font-family: "LGC"
+}
+
+mat-icon{
+  user-select: none;
+}
+
+@keyframes placeHolderShimmer{
+  0%{
+    background-position: 0px 0
+  }
+  100%{
+    background-position: 800px 0
+  }
+}
+
+.animated-background{
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: #f6f7f8;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 800px 104px;
+  position: relative;
+}
+
+.animated-background .background-masker{
+  background: #fff;
+  position: absolute;
+  height:20px;
+}
+
+.container{
+  min-height:100%;
+  width:100%;
+  padding:100px;
+  padding-bottom:50px;
+  display: flex;
+  flex-direction: column;
+  --fade-color:red;
+}
+
+.container-title{
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-text{
+  font-weight: bold;
+  position: relative;
+}
+
+.title-text:after{
+  position: absolute;
+  content: '';
+  height: 3px;
+  width:30px;
+  left:0;
+  bottom: -3px;
+}
+
+.title-element{
+  font-size: 30px;
+}
+
+.sub-title-element{
+  font-size:18px;
+}
+
+.sub-text-element{
+  font-size: 15px;
+}
+
+.panel{
+  background-color: white;
+  box-shadow:10px 10px 10px 0px rgba(200,200,200,0.1);
+  border-radius: 10px;
+  padding:20px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.container .panel{
+  border-bottom: 2px solid var(--fade-color);
+}
+
+.button{
+  width: max-content;
+  padding:5px;
+  padding-left:10px;
+  padding-right:10px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  border-radius:5px;
+  cursor: pointer;
+}
+
+.mat-ripple-element{
+  display: none !important;
+}
+
+@media screen and (max-width:1000px){
+  body{
+    font-size:15px
+  }
+
+  .container{
+    padding:8%;
+    padding-top:10%;
+    padding-bottom:4%;
+  }
+
+  .title-element{
+    font-size: 28px;
+  }
+
+  .sub-title-element{
+    font-size:17px;
+  }
+
+  .sub-text-element{
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width:850px){
+  body{
+    font-size:14px
+  }
+
+  .container{
+    padding:6%;
+    padding-top:85px;
+    padding-bottom:30px;
+  }
+
+  .title-element{
+    font-size: 26px;
+  }
+
+  .sub-title-element{
+    font-size:16px;
+  }
+
+  .sub-text-element{
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width:650px){
+  body{
+    font-size:13px
+  }
+
+  .container{
+    padding-left:4%;
+    padding-right:4%;
+  }
+
+  .title-element{
+    font-size: 24px;
+  }
+
+  .sub-title-element{
+    font-size:15px;
+  }
+
+  .sub-text-element{
+    font-size: 12px;
+  }
+}

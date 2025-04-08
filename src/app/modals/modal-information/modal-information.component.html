@@ -1,0 +1,9 @@
+<div class="modal-container">
+	<mat-icon (click)="crossClose()" class="close">close</mat-icon>
+	<div class="title">{{title}}</div>
+	<div class="content" [innerHTML]="content"></div>
+	<div class="actions">
+		<div (click)="close()" *ngIf="cancel">{{cancel}}</div>
+		<div (click)="confirmAndClose()" *ngIf="confirm">{{confirm}}</div>
+	</div>
+</div>

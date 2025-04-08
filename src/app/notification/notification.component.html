@@ -1,0 +1,13 @@
+<div [style.--rgbcolor]="patientService.rgbColors[patientService.user.color]" class="notification-container">
+	<mat-icon #toggleElement [ngClass]="{'active':update}" (click)="toggleUpdate()">update</mat-icon>
+	<div #updateElement class="panel notifications" [ngClass]="{'active':active}">
+		<ng-container *ngIf="update; else noUpdate">
+			<div class="sub-title-element">{{title}}</div>
+			<div class="description" [innerHtml]="description"></div>
+		</ng-container>
+		<ng-template #noUpdate>
+			Aucune mise à jour n'est prévue pour le moment
+		</ng-template>
+		<div class="sub-text-element">Version actuelle : {{version}}</div>
+	</div>
+</div>

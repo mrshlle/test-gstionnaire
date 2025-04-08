@@ -1,0 +1,304 @@
+.settings-container{
+	--color:red;
+	--sup-color:red;
+	--sub-color:red;
+	--text-color:red;
+	--fade-color:red;
+}
+
+.settings-container .button{
+	background-color: var(--color);
+	color:var(--text-color);
+}
+
+.settings-container .container-title .title-text:after{
+	background-color: var(--color);
+}
+
+.settings-container .records-tab{
+	margin-top:20px;
+	margin-bottom: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap:20px;
+}
+
+.settings-container .records-tab .record{
+	padding:40px;
+	background: radial-gradient(circle at right bottom,#cecece 0%, #ececec 100%);
+	border-radius: 10px;
+	font-weight: bold;
+	cursor: pointer;
+	text-align: center;
+}
+
+.settings-container .records-tab .record.active{
+	background: radial-gradient(circle at right bottom,var(--sup-color) 0%, var(--color) 100%);
+	color:var(--text-color);
+}
+
+.settings-container .wrapper{
+	display: flex;
+	flex-direction: column-reverse;
+}
+
+.settings-container .wrapper mat-icon{
+	cursor: pointer;
+}
+
+.settings-container .wrapper .buttons{
+	flex:1;
+	display: flex;
+	box-shadow: 10px 10px 10px 0px rgba(200,200,200,0.1);
+}
+
+.settings-container .wrapper .buttons .button{
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+	background-color: var(--color);
+	color:var(--text-color);
+	height: 100%;
+	width:100%;
+	justify-content: center;
+}
+
+.settings-container .wrapper .buttons .button.disabled{
+	background-color: #ececec;
+	color:#cecece;
+	cursor: default;
+}
+
+.settings-container .wrapper .panel{
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	flex:10;
+	border-bottom:0px;
+	position: relative;
+	box-shadow: none;
+}
+
+.settings-container .panel.signature{
+	display: flex;
+	flex-direction: column;
+}
+
+.settings-container .wrapper .panel .add-icon{
+	display: block;
+	margin-top: 15px;
+}
+
+.settings-container .wrapper .panel .loading{
+	position: absolute;
+	left:0;
+	bottom: 0;
+	width: 100%;
+	height:100%;
+	max-height: 0%;
+	overflow: hidden;
+	transition: max-height 0.1s;
+	background-color:var(--color);
+	color:var(--text-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	z-index: 1;
+}
+
+.settings-container .wrapper .panel .loading.show{
+	max-height: 100%;
+}
+
+:host ::ng-deep .settings-container .wrapper .panel .loading .mat-mdc-progress-spinner circle, .mat-mdc-progress-spinner circle{
+	stroke:var(--text-color);
+}
+
+.settings-container .wrapper .panel input, .settings-container .wrapper .panel textarea{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:100%;
+	padding: 10px;
+}
+
+.settings-container .wrapper .panel textarea{
+	resize: none;
+	height: 120px;
+	margin-top: 5px;
+}
+
+.settings-container .panel .divider{
+	margin:20px;
+	height: 1px;
+	background-color: #ececec;
+}
+
+.settings-container .wrapper .panel .fields{
+	display: flex;
+	gap:5px;
+	align-items: center;
+}
+
+.settings-container .wrapper .panel .fields:not(:first-child){
+	margin-top: 10px;
+}
+
+.settings-container .wrapper .panel .fields .field{
+	flex:1;
+}
+
+.settings-container .wrapper .panel .field .label{
+	color:#868686;
+	margin-bottom: 5px;
+}
+
+.settings-container .wrapper .panel .colors{
+	display: flex;
+	flex-wrap: wrap;
+	gap:10px;
+}
+
+.settings-container .wrapper .panel .colors .color{
+	height:50px;
+	width:50px;
+	border-radius:3px;
+	cursor: pointer;
+	box-shadow: 10px 10px 10px 0px rgba(200,200,200,0.1);
+}
+
+.settings-container .wrapper .panel .colors .color.selected{
+	opacity:0.3;
+}
+
+.settings-container .wrapper .panel .colors .color.selected.disabled{
+	opacity: 1;
+}
+
+.settings-container .wrapper .panel .colors .color.disabled{
+	opacity:0.3;
+	cursor: default;
+}
+
+.settings-container .wrapper .panel .stamp-options{
+	display: flex;
+	gap:20px;
+}
+
+.settings-container .wrapper .panel .stamp-options > div{
+	flex:1;
+}
+
+.settings-container .wrapper .panel .stamp-options .stamp-image{
+	display: flex;
+	flex-direction: column;
+	gap:10px;
+}
+
+.settings-container .panel .file-picker{
+	flex:1;
+}
+
+.settings-container .panel .file-picker .picker{
+	border-radius: 10px;
+	border:1px dashed #cecece;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	cursor: pointer;
+	height: 100%;
+	width: 100%;
+	position: relative;
+	padding:10px;
+}
+
+.settings-container .panel .file-picker .picker.loading-label{
+	cursor: initial;
+	color:transparent;
+}
+
+.settings-container .panel .mat-mdc-progress-spinner{
+	position:absolute;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+	z-index: 100;
+}
+
+.settings-container .panel .image{
+	width: calc(100% - 20px);
+	position:relative;
+	max-height: 250px;
+	text-align: center;
+}
+
+.settings-container .panel .image mat-icon{
+	position: absolute;
+	top:0;
+	right: -20px;
+	height: 20px;
+	width: 20px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.settings-container .panel .image.loading-image mat-icon{
+	cursor: initial;
+}
+
+.settings-container .panel .image mat-icon:nth-child(2){
+	top:30px;
+}
+
+.settings-container .panel .image img{
+	height: 100%;
+	max-width:100%;
+}
+
+.settings-container .panel .checkbox{
+	margin-bottom: 10px;
+}
+
+.settings-container .wrapper .panel .stamp-options .hidden{
+	display: none;
+}
+
+.settings-container .records-tab.forms{
+	margin-top: 0;
+}
+
+.settings-container .records-tab.forms .record{
+	padding:10px;
+	flex:1;
+}
+
+.settings-container .records-tab.forms .record.active{
+	background: radial-gradient(circle at right bottom,var(--color) 0%, var(--sub-color) 100%);
+}
+
+@media screen and (max-width:650px){
+	.settings-container .records-tab .record{
+		padding:30px;
+	}
+
+	.settings-container .wrapper .panel .stamp-options{
+		flex-direction: column;
+	}
+}
+
+@media screen and (max-width:550px){
+	.settings-container .records-tab{
+		flex-direction:column;
+	}
+
+	.settings-container .records-tab.forms{
+		flex-direction: row;
+	}
+
+	.settings-container .records-tab .record{
+		padding:20px;
+		width: 100%;
+	}
+}

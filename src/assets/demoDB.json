@@ -1,0 +1,25 @@
+{
+	'user': {
+		'id_user': -1
+		public nom: string
+		public prenom: string
+		public mail: string
+		public client: boolean
+		public active: boolean
+		public modules: any
+		public adeli: any
+		public facture: string
+		public prix_normal: number
+		public prix_speciaux: any
+		public interrogatoire: string
+		public consultation: string
+		public charge: number
+		public nbr_facture: number
+		public format: string
+		public color: number
+		public default_patient_survey: string
+		public default_consultation_survey: string
+		public date_creation: DateTime
+		public date_modification: DateTime
+	}
+}

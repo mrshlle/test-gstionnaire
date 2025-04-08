@@ -1,0 +1,108 @@
+<div [style.--text-color]="patientService.textColors[patientService.user.color]" [style.--color]="patientService.mainColors[patientService.user.color]" [style.--fade-color]="patientService.svgColors[patientService.user.color]" class="list-container container">
+	<div class="container-title">
+		<div class="title-text title-element">
+			Liste des fiches
+		</div>
+		<div (click)="patientService.nouveauPatient()" class="button">
+			Nouvelle fiche
+		</div>
+	</div>
+	<div class="panel search-container">
+		<div class="search-header sub-title-element">
+			Critères de recherche
+		</div>
+		<div [ngClass]="{'criteria':true,'show':show}">
+			<div class="lastname">
+				<div class="label">
+					Nom
+				</div>
+				<div class="value">
+					<input matInput (input)="onChangeNom($event)">
+				</div>
+			</div>
+			<div class="firstname">
+				<div class="label">
+					Prénom
+				</div>
+				<div class="value">
+					<input matInput (input)="onChangePrenom($event)">
+				</div>
+			</div>
+			<mat-icon (click)="expand()">expand_more</mat-icon>
+			<div [ngClass]="{'date':true,'show':show}">
+				<div class="label">
+					Date de consultation
+				</div>
+				<div class="value">
+					<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" autocomplete="off" (paste)="false" (input)="dateInputDay($event)"></span>
+					<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" autocomplete="off" (paste)="false" (input)="dateInputMonth($event)"></span>
+					<span><input matInput #dateInput (keypress)="numberOnlyWithoutDot($event)" autocomplete="off" (paste)="false" (input)="dateInputYear($event)"></span>
+				</div>
+			</div>
+			<div [ngClass]="{'text':true,'show':show}">
+				<div class="label">
+					Texte présent dans les fiches
+				</div>
+				<div class="value">
+					<textarea matInput (input)="onChangeText($event)"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel list">
+		<ng-container *ngIf="shownPatients; else waitPatients">
+			<div *ngIf="shownPatients.length > 0; else noPatients" class="list-elements">
+				<div class="header">
+					<div><mat-checkbox [indeterminate]="someComplete()" [checked]="checked" (change)="onChangeEverything($event.checked)"></mat-checkbox></div>
+					<div>Nom</div>
+					<div>Prénom</div>
+					<div>Consultations</div>
+					<div></div>
+				</div>
+				<div *ngFor="let patient of shownPatients" [ngClass]="{'warning':patient.alerte}" class="list-element">
+					<div><mat-checkbox [(ngModel)]="patient.checked" (ngModelChange)="onChangeCheckbox()"></mat-checkbox></div>
+					<div>{{patient.nom}}</div>
+					<div>{{patient.prenom}}</div>
+					<div>{{patient.dates_consultations.length}}</div>
+					<div><mat-icon (click)="afficher(patient)">open_in_new</mat-icon></div>
+				</div>
+			</div>
+		</ng-container>
+		<ng-template #noPatients>
+			<div class="no-elements" *ngIf="patients.length === 0; else noResult">
+				Vous n'avez aucune fiche pour le moment<br>
+				<div (click)="patientService.nouveauPatient()" class="button">En créer une</div>
+			</div>
+			<ng-template #noResult>
+				<div class="no-elements">
+					Aucun résultat ne correspond à vos critères de recherche
+				</div>
+			</ng-template>
+		</ng-template>
+		<ng-template #waitPatients>
+			<div class="animated-background">
+				<div class="background-masker first-divider"></div>
+				<div class="background-masker second-divider"></div>
+				<div class="background-masker first-first-column"></div>
+				<div class="background-masker first-second-column"></div>
+				<div class="background-masker first-third-column"></div>
+				<div class="background-masker second-first-column"></div>
+				<div class="background-masker second-second-column"></div>
+				<div class="background-masker second-third-column"></div>
+				<div class="background-masker third-first-column"></div>
+				<div class="background-masker third-second-column"></div>
+				<div class="background-masker third-third-column"></div>
+				<div class="background-masker fourth-first-column"></div>
+				<div class="background-masker fourth-second-column"></div>
+				<div class="background-masker fourth-third-column"></div>
+				<div class="background-masker fifth-first-column"></div>
+				<div class="background-masker fifth-second-column"></div>
+				<div class="background-masker fifth-third-column"></div>
+			</div>
+		</ng-template>	
+	</div>
+	<div *ngIf="shownPatients" class="panel remove" [ngClass]="{'visible':(shownPatients | checked).length > 0}">
+		<div class="info">{{(shownPatients | checked).length}} <ng-container *ngIf="(shownPatients | checked).length > 1;else justOne">fiches sélectionnées</ng-container><ng-template #justOne>fiche sélectionnée</ng-template></div>
+		<div (click)="removeRecords()" class="button">Supprimer <mat-icon>delete</mat-icon></div>
+	</div>
+</div>

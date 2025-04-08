@@ -1,0 +1,379 @@
+.menu{
+	--color:red;
+	--rgbcolor:red;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	width: max-content;
+	padding: 20px;
+	flex:1;
+	background-color: white;
+	-webkit-box-shadow: -40px 0px 60px 0px rgba(200,200,200,0.75);
+	-moz-box-shadow: -40px 0px 60px 0px rgba(200,200,200,0.75);
+	box-shadow: -40px 0px 60px 0px rgba(200,200,200,0.75);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.menu .logo{
+	padding:10px;
+	display: flex;
+	align-items: center;
+	justify-content: left;
+}
+
+.menu .logo img{
+	height: 70px;
+}
+
+.menu ul{
+	list-style: none;
+}
+
+.menu ul li:not(:last-child){
+	margin-bottom: 30px;
+}
+
+.menu mat-icon{
+	color: #d5d5d5db;
+	cursor: pointer;
+	vertical-align: middle;
+	height:28px;
+	width:28px;
+	font-size: 28px
+}
+
+.menu .logout, .menu ul li{
+	position: relative;
+}
+
+.menu .content{
+	opacity: 0;
+	position: absolute;
+	transition: opacity 0.1s;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 50px;
+}
+
+.menu mat-icon:hover + .content{
+	opacity: 1;
+}
+
+.menu mat-icon:hover, .menu ul li.active mat-icon{
+	color:rgba(var(--rgbcolor),0.85);
+	text-shadow: 0px 3px 3px #fff, 0 0 0 #000, 0px 3px 3px #fff;
+}
+
+.menu .separator{
+	height: 1px;
+	width: 100%;
+	background-color: #d5d5d5db;
+}
+
+.menu .modules{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right:0;
+	bottom: 0;
+	background-color: white;
+	z-index:105;
+	display: grid;
+	padding:10%;
+	grid-template-columns: repeat(4,1fr);
+	visibility: hidden;
+	opacity: 0;
+	transition: all 0.2s;
+}
+
+.menu .modules.active{
+	visibility: visible;
+	opacity: 1;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .menu .modules .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+	background-color: var(--color);
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .menu .modules .mat-checkbox-checked.mat-accent.mat-checkbox-disabled .mat-checkbox-background{
+	background-color: #b0b0b0;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .menu .modules .mat-checkbox-frame{
+	border-color: var(--color);
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .menu .modules .mat-checkbox-disabled .mat-checkbox-frame{
+	border-color: #b0b0b0;
+}
+
+.menu .modules .fade-logo{
+    width: 50%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    transform: translate(-30%,-30%);
+    opacity: 0.1;
+}
+
+.menu .modules .fade-logo img{
+	width: 100%
+}
+
+.menu .modules .back{
+	position: absolute;
+	top:50px;
+	right: 50px;
+	font-size: 40px;
+	height: 40px;
+	width: 40px;
+}
+
+.menu .modules .settings{
+	position: absolute;
+	right: 50px;
+	top:100px;
+	font-size: 25px;
+	height: 25px;
+	width: 40px;
+	text-align: center;
+}
+
+.menu .modules .configure{
+	position: absolute;
+	top:80px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.menu .modules .configure .title-element{
+	margin-bottom: 20px;
+}
+
+.menu .modules .configure .buttons{
+	display: flex;
+	justify-content: space-around;
+}
+
+.menu .modules .configure .buttons .loading{
+	cursor: initial;
+}
+
+:host ::ng-deep .menu .modules .configure .buttons .mat-mdc-progress-spinner circle,.menu .modules .configure .buttons .mat-mdc-progress-spinner circle{
+	stroke:#d5d5d5db;
+}
+
+.menu .modules .module{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap:20px;
+}
+
+.menu .modules .module .icon{
+	position: relative;
+}
+
+.menu .modules .module .icon .layout{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.menu .modules .module .content{
+	opacity: 1;
+	position: initial;
+}
+
+.menu .modules .module .icon mat-icon{
+	font-size: 50px;
+	height: 50px;
+	width: 50px;
+}
+
+.mobile-menu{
+	position: relative;
+	z-index: 37;
+	display: none;
+	height: 50px;
+	--rgbcolor: red;
+	background-color: white;
+	-webkit-box-shadow: 0px 40px 60px 0px rgba(200,200,200,0.75);
+	-moz-box-shadow: 0px 40px 60px 0px rgba(200,200,200,0.75);
+	box-shadow: 0px 40px 60px 0px rgba(200,200,200,0.75);
+	transition: box-shadow 0.5s;
+}
+
+.mobile-menu.show{
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.mobile-menu .button-burger .burger {
+	border-top:2px solid rgb(var(--rgbcolor));
+	position: relative;
+	height:22px;
+	width:25px;
+	transition: all 0.2s;
+	cursor: pointer;
+}
+
+.mobile-menu .button-burger .burger:before {
+	content:"";
+	display:block;
+	position:absolute;
+	height:2px;
+	width:25px;
+	left:0;
+	background:rgb(var(--rgbcolor));
+	top:8px;
+	transition: all 0.2s;
+}
+
+.mobile-menu .button-burger .burger:after {
+	content:"";
+	display:block;
+	position:absolute;
+	height:2px;
+	width:25px;
+	left:0;
+	background:rgb(var(--rgbcolor));
+	bottom:0;
+	transition: all 0.2s;
+}
+
+.mobile-menu .button-burger .burger.show {
+    border-color:transparent;
+}
+
+.mobile-menu .button-burger .burger.show:before {
+    transform:rotate(45deg);
+    width:30px;
+}
+
+.mobile-menu .button-burger .burger.show:after {
+	transform:rotate(135deg);
+	bottom:10px;
+	width:30px;
+}
+
+.mobile-menu .main-elements{
+	height: 100%;
+	position: relative;
+	display: flex;
+}
+
+.mobile-menu .main-elements > div{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.mobile-menu .main-elements mat-icon{
+	color:rgb(var(--rgbcolor));
+}
+
+.mobile-menu .main-elements .logo img{
+	height: 40px;
+}
+
+.mobile-menu .button-burger, .mobile-menu .logout{
+	flex:1;
+}
+
+.mobile-menu .button-burger, .mobile-menu .logout mat-icon{
+	cursor: pointer;
+}
+
+.mobile-menu .separator{
+	height: 90%;
+	background-color: #d5d5d5db;
+	width:1px;
+}
+
+.mobile-menu .add-button{
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	background-color: rgb(var(--rgbcolor));
+	position:absolute;
+	left:50%;
+	transform:translateX(-50%);
+	bottom: 25px;
+}
+
+.mobile-menu .add-button mat-icon{
+	color:#d5d5d5db;
+}
+
+.menu-elements{
+	display: none;
+	height: max-content;
+	width: 100%;
+	position: absolute;
+	bottom:-100%;
+	transition:bottom 0.5s;
+	z-index: 36;
+	padding-top:20px;
+	padding-bottom:20px;
+	background-color: white;
+	color:rgb(var(--rgbcolor));
+}
+
+.menu-elements.show{
+	bottom: 50px;
+	box-shadow: 0px 40px 60px 0px rgba(200,200,200,0.75);
+}
+
+.menu-elements > div{
+	text-transform:uppercase;
+	cursor: pointer;
+	text-align: center;
+	position: relative;
+	height: 30px;
+	line-height: 30px;
+}
+
+.menu-elements .separator{
+	height: 2px;
+	width: 50%;
+	margin: auto;
+	background-color: var(--sup-color)
+}
+
+.menu-elements .active:before{
+	position: absolute;
+	height: 1px;
+	width: 25px;
+	background-color: var(--sup-color);
+	content: '';
+	bottom: 3px;
+}
+
+@media screen and (max-width:1000px){
+	.menu{
+		display: none;
+	}
+
+	.mobile-menu{
+		display: block;
+	}
+
+	.menu-elements{
+		display: block;
+	}
+}

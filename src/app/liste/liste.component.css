@@ -1,0 +1,340 @@
+.list-container{
+	position: relative;
+	--color:red;
+	--text-color:red;
+	--fade-color:red;
+}
+
+.list-container .container-title .title-text:after{
+	background-color: var(--color);
+}
+
+.list-container .container-title .button{
+	background-color: var(--color);
+	color:var(--text-color);
+}
+
+.list-container .search-container .search-header{
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.list-container .search-container .criteria{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	grid-column-gap:15px;
+	grid-row-gap: 30px;
+}
+
+.list-container .search-container .criteria mat-icon{
+	display: none;
+}
+
+.list-container .search-container .criteria .label{
+	color:#868686;
+	margin-bottom: 5px;
+}
+
+.list-container .search-container .criteria .text{
+	grid-column:1/span 3;
+}
+
+.list-container .search-container .criteria .value input{
+	background-color: transparent;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	width:100%;
+	padding: 10px;
+}
+
+.list-container .search-container .criteria .date .value{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	border: 1px solid #ececec;
+	border-radius: 5px;
+}
+
+.list-container .search-container .criteria .date .value span{
+	width:90%;
+	position: relative;
+}
+
+.list-container .search-container .criteria .date .value input{
+	border: none;
+}
+
+.list-container .search-container .criteria .date .value span:not(:last-child):after{
+	position: absolute;
+	content: '/';
+	right: -9%;
+	bottom: 50%;
+	transform: translateY(50%);
+}
+
+.list-container .search-container .criteria .text textarea{
+	resize:none;
+	width:100%;
+	border: 1px solid #ececec;
+	border-radius: 5px;
+	height:80px;
+	background-color: transparent;
+	padding:10px;
+}
+
+.list-container .list{
+	width:100%;
+	margin-top:20px;
+	padding:0;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, ::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background{
+	background-color:var(--color);
+}
+
+.list-container .list .list-elements{
+	width: 100%;
+}
+
+.list-container .list .list-elements > div{
+	display: grid;
+	grid-template-columns: 10% 25% 25% 25% 15%;
+	min-height: 40px;
+}
+
+.list-container .list .list-elements > div div{
+	display: flex;
+	align-items: center;
+	padding:15px;
+}
+
+.list-container .list .list-elements mat-checkbox{
+	display: inherit;
+}
+
+.list-container .list .list-elements mat-icon{
+	height: 18px;
+	width: 18px;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.list-container .list .list-elements .header{
+	background-color: var(--fade-color);
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.list-container .list .list-elements > div:not(:first-child):hover{
+	background-color: #fbfbfb;
+}
+
+.list-container .list .list-elements .list-element.warning{
+	background-color: #ffda98;
+}
+
+.list-container .list .no-elements{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color:#868686;
+	margin:20px;
+}
+
+.list-container .list .no-elements .button{
+	background-color: var(--color);
+	color:var(--text-color);
+	margin-top:10px;
+}
+
+.list-container .list .animated-background{
+	margin:20px;
+	height: 100px;
+}
+
+.list-container .list .animated-background .background-masker.first-divider,
+.list-container .list .animated-background .background-masker.second-divider{
+	left:0;
+	right:0;
+}
+.list-container .list .animated-background .background-masker.first-divider{
+	top:20px;
+}
+.list-container .list .animated-background .background-masker.second-divider{
+	bottom: 20px;
+}
+
+.list-container .list .animated-background .background-masker.first-first-column,
+.list-container .list .animated-background .background-masker.first-second-column,
+.list-container .list .animated-background .background-masker.first-third-column{
+	width:5%;
+	left:5%;
+}
+.list-container .list .animated-background .background-masker.first-second-column{
+	top:40px;
+}
+.list-container .list .animated-background .background-masker.first-third-column{
+	top:80px;
+}
+
+.list-container .list .animated-background .background-masker.second-first-column{
+	width:10%;
+	left:25%;
+}
+.list-container .list .animated-background .background-masker.second-second-column{
+	width:8%;
+	left:27%;
+	top:40px;
+}
+.list-container .list .animated-background .background-masker.second-third-column{
+	width:18%;
+	left:17%;
+	top:80px;
+}
+
+.list-container .list .animated-background .background-masker.third-first-column{
+	width:5%;
+	left:55%;
+}
+.list-container .list .animated-background .background-masker.third-second-column{
+	width:8%;
+	left:52%;
+	top:40px;
+}
+.list-container .list .animated-background .background-masker.third-third-column{
+	width:10%;
+	left:50%;
+	top:80px;
+}
+
+.list-container .list .animated-background .background-masker.fourth-first-column{
+	width:20%;
+	left:65%;
+}
+.list-container .list .animated-background .background-masker.fourth-second-column{
+	width:19%;
+	left:66%;
+	top:40px;
+}
+.list-container .list .animated-background .background-masker.fourth-third-column{
+	width:20%;
+	left:65%;
+	top:80px;
+}
+
+.list-container .list .animated-background .background-masker.fifth-first-column,
+.list-container .list .animated-background .background-masker.fifth-second-column,
+.list-container .list .animated-background .background-masker.fifth-third-column{
+	width:10%;
+	left:90%;
+}
+.list-container .list .animated-background .background-masker.fifth-first-column{
+	width: 15%;
+	left:85%;
+}
+.list-container .list .animated-background .background-masker.fifth-second-column{
+	top:40px;
+}
+.list-container .list .animated-background .background-masker.fifth-third-column{
+	top:80px;
+}
+
+.list-container .remove{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	width: 200px;
+	position: fixed;
+	z-index: -10;
+	right:2%;
+	height: 150px;
+	bottom: 0;
+	opacity: 0;
+	border: 1px solid #f2f2f2;
+	padding:10px;
+	transition: bottom 0.3s;
+}
+
+@keyframes fadein{
+	0% {
+		z-index: 10;
+	}
+	100% {
+		z-index: 10;
+		opacity: 1;
+	}
+}
+
+.list-container .remove.visible{
+	animation: fadein 0.3s forwards;
+	bottom: 20px;
+}
+
+.list-container .remove .button{
+	color:var(--text-color);
+	background-color: var(--color);
+}
+
+.list-container .remove .button mat-icon{
+	margin-left:5px;
+}
+
+@media screen and (max-width: 1000px){
+	.list-container .search-container .criteria{
+		grid-row-gap: 20px;
+	}
+
+	.list-container .remove.visible{
+		bottom: 70px;
+	}
+
+	@keyframes fadein{
+		0% {
+			z-index: 10;
+		}
+		100% {
+			z-index: 10;
+			opacity: 1;
+		}
+	}
+}
+
+@media screen and (max-width: 650px){
+	.list-container .remove{
+		height: 120px;
+	}
+}
+
+@media screen and (max-width: 500px){
+	.list-container .search-container .criteria{
+		grid-template-columns: repeat(2,1fr);
+		grid-row-gap: 10px;
+		max-height: 85px;
+		overflow:hidden;
+		transition:max-height 0.5s;
+	}
+
+	.list-container .search-container .criteria.show{
+		max-height: 270px;
+	}
+
+	.list-container .search-container .criteria mat-icon, .list-container .search-container .criteria .date, .list-container .search-container .criteria .text{
+		grid-column: 1/span 2;
+	}
+
+	.list-container .search-container .criteria mat-icon{
+		display: block;
+		transition:transform 0.5s;
+	}
+
+	.list-container .search-container .criteria.show mat-icon{
+		transform: rotate(180deg)
+	}
+
+	.list-container .remove{
+		width: 160px;
+		height: 100px;
+		padding:5px;
+	}
+}

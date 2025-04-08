@@ -1,0 +1,535 @@
+.accountancy-container{
+	position: relative;
+	--color:red;
+	--fade-color:red;
+	--sup-color:red;
+	--text-color:red;
+}
+
+.accountancy-container .container-title .title-text:after{
+	background-color: var(--color);
+}
+
+.accountancy-container .chart-container{
+	padding-bottom: 40px;
+	margin-bottom: 40px;
+}
+
+.accountancy-container .chart-container .year{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.accountancy-container .chart-container .year .arrow{
+	cursor: pointer;
+	vertical-align: bottom;
+}
+
+.accountancy-container .chart-container .year .arrow.disabled{
+	cursor: default;
+	color:#ececec;
+}
+
+.accountancy-container .chart-container .info{
+	display: flex;
+}
+
+.accountancy-container .chart-container .info .income{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.accountancy-container .chart-container .info .income .amount{
+	font-size:30px;
+}
+
+.accountancy-container .chart-container .info .income .waiting{
+	display: flex;
+	align-items: flex-end;
+	font-size: 30px;
+}
+
+.accountancy-container .chart-container .info .income .waiting .animated-background{
+	height: 28px;
+	width: 80px;
+}
+
+.accountancy-container .chart-container .info .divider{
+	width: 1px;
+	background-color: #ececec;
+	margin:5%;
+}
+
+.accountancy-container .chart-container .info .chart{
+	flex:1;
+	display: grid;
+	grid-template-columns: repeat(12,1fr);
+}
+
+.accountancy-container .chart-container .info .chart .bar-wrapper{
+	height: 250px;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+}
+
+.accountancy-container .chart-container .info .chart .bar-wrapper .bar{
+	width:50%;
+	background-color: var(--fade-color);
+	transition:height 0.5s;
+	min-height: 10px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.accountancy-container .chart-container .info .chart .bar-wrapper .bar:hover, .accountancy-container .chart-container .info .chart .bar-wrapper .bar.active{
+	background: linear-gradient(var(--color) 0%, var(--sup-color) 100%);
+}
+
+.accountancy-container .chart-container .info .chart .bar-wrapper .bar.disabled:hover, .accountancy-container .chart-container .info .chart .bar-wrapper .bar.disabled{
+	background: #ececec;
+	cursor: default;
+}
+
+.accountancy-container .chart-container .info .chart .month{
+	writing-mode: vertical-lr;
+	transform: translateX(-50%) rotate(-155deg);
+	text-align: right;
+	cursor: default;
+}
+
+.accountancy-container .details-header{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	column-gap: 5%;
+	margin-bottom: 30px;
+	margin-top:20px;
+}
+
+.accountancy-container .details-header > div{
+	border-radius: 10px;
+	box-shadow: 10px 10px 10px 0px rgba(200,200,200,0.1);
+	background-color:white;
+	padding:20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.accountancy-container .details-header .turnover .animated-background{
+	height: 20px;
+	width: 50%;
+}
+
+.accountancy-container .details-header .fee-wrapper{
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	position: relative;
+}
+
+.accountancy-container .details-header .fee-wrapper .fee{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.accountancy-container .details-header .fee-wrapper .button{
+	position: absolute;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	bottom:0;
+	left:0;
+	width: 100%;
+	background-color: var(--color);
+	justify-content: center;
+	transform: translateY(100%);
+	box-shadow: 10px 10px 10px 0px rgba(200,200,200,0.1);
+	color:var(--text-color);
+}
+
+.accountancy-container .details-header .fee-wrapper .button.update{
+	width:50%;
+}
+
+.accountancy-container .details-header .fee-wrapper .button.update:last-child{
+	transform: translateY(100%) translateX(100%);
+}
+
+.accountancy-container .details-header .fee-wrapper .button.disabled{
+	color:#ececec;
+	cursor: default;
+}
+
+.accountancy-container .details-header .fee-wrapper input{
+	width: 40px;
+	border:1px solid #ececec;
+	transition: border-color 0.5s;
+	background-color: transparent;
+	padding:5px;
+	border-radius: 5px;
+}
+
+.accountancy-container .details-header .fee-wrapper .loading{
+	position: absolute;
+	left:0;
+	bottom: 0;
+	width: 100%;
+	height:100%;
+	max-height: 0%;
+	overflow: hidden;
+	transition: max-height 0.1s;
+	background-color:var(--color);
+	color:var(--text-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.accountancy-container .details-header .fee-wrapper .loading.show{
+	max-height: 100%;
+}
+
+:host ::ng-deep .accountancy-container .details-header .fee-wrapper .loading .mat-mdc-progress-spinner circle, .mat-mdc-progress-spinner circle{
+	stroke:var(--text-color);
+}
+
+.accountancy-container .details-header .fee-wrapper .animated-background{
+	height: 20px;
+	width: 70%;
+}
+
+.accountancy-container .details-header > div > span{
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.accountancy-container .details-header .benefit .animated-background{
+	height: 20px;
+	width: 60%;
+}
+
+.accountancy-container .consultations{
+	position: relative;
+	overflow: hidden;
+}
+
+.accountancy-container .consultations .buttons{
+	display: flex;
+	justify-content: flex-end;
+	gap:10px;
+}
+
+.accountancy-container .consultations .buttons .button{
+	background-color: var(--color);
+	color:var(--text-color);
+}
+
+.accountancy-container .consultations.waiting{
+	margin-top: 0;
+}
+
+.accountancy-container .consultations .text{
+	cursor: pointer;
+	width: max-content;
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.accountancy-container .consultations .text mat-icon{
+	transition:transform 0.5s;
+}
+
+.accountancy-container .consultations .text.show mat-icon{
+	transform:rotate(180deg);
+}
+
+.accountancy-container .consultations .checkboxes{
+	max-height: 0;
+	transition:max-height 0.2s;
+	overflow: hidden;
+}
+
+.accountancy-container .consultations .checkboxes .flexboxes{
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap:2%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.accountancy-container .consultations .checkboxes.show{
+	max-height: 130px;
+}
+
+.accountancy-container .consultations .checkboxes .checkbox{
+	display: flex;
+	align-items: center;
+	padding:10px;
+	background-color: #ececec;
+	border-radius:5px;
+	cursor: pointer;
+	flex:1;
+}
+
+.accountancy-container .consultations .checkboxes .checkbox mat-checkbox{
+	margin-top: -3px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.accountancy-container .consultations .checkboxes .checkbox > div:last-child{
+	flex:1;
+	text-align: end;
+}
+
+.accountancy-container .consultations .checkboxes .checkbox.active{
+	background-color: var(--fade-color);
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .accountancy-container .consultations .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+	background-color: var(--color)
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+:host ::ng-deep .accountancy-container .consultations .mat-checkbox-frame{
+	border-color: var(--color)
+}
+
+.accountancy-container .consultations .list-consultations{
+	margin-top: 20px;
+}
+
+.accountancy-container .consultations .loading{
+	position: absolute;
+	top:0;
+	right:0;
+	left:0;
+	bottom:0;
+	z-index: 10;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	background-color: var(--color);
+	border-radius:10px;
+	transform: translateY(101%);
+	transition: transform 0.2s;
+	color:var(--text-color);
+}
+
+.accountancy-container .consultations .loading.show{
+	transform: translateY(0);
+}
+
+:host ::ng-deep .accountancy-container .consultations .loading .mat-mdc-progress-spinner circle{
+	stroke:var(--text-color);
+}
+
+.accountancy-container .consultations .list-consultations .element .element-date{
+	color:#6c6c6c;
+	margin-bottom: 10px;
+}
+
+.accountancy-container .consultations .list-consultations .element .element-value{
+	display: grid;
+	grid-template-columns: 80% 15% 5%;
+	height: 50px;
+	padding-left:20px;
+	padding-top: 10px;
+}
+
+.accountancy-container .consultations .list-consultations .element .element-value > div{
+	display: flex;
+	align-items: center;
+}
+
+.accountancy-container .consultations .list-consultations .element .element-value > div:nth-child(2){
+	justify-content: flex-end;
+}
+
+.accountancy-container .consultations .list-consultations .element .element-value > div:last-child{
+	justify-content: center;
+}
+
+.accountancy-container .consultations .list-consultations .element-value.not{
+	color:#ececec;
+}
+
+.accountancy-container .consultations .list-consultations .more-element{
+	position: relative;
+}
+
+.accountancy-container .consultations .list-consultations .more-element mat-icon{
+	cursor: pointer;
+}
+
+.accountancy-container .consultations .list-consultations .more-element .more-menu{
+	position: absolute;
+	top:0;
+	left:0;
+	z-index: -1001;
+	opacity: 0;
+	border: 1px solid #f2f2f2;
+	padding: 15px;
+	padding-bottom: 0;
+	width: max-content;
+	display: block;
+	margin-top: 0;
+	transform: translate(-100%,-100%);
+}
+
+@keyframes fade{
+	0% {
+		z-index: 1001;
+	}
+	100% {
+		z-index: 1001;
+		opacity: 1;
+	}
+}
+
+.accountancy-container .consultations .list-consultations .more-element .more-menu.show{
+	animation: fade 0.3s forwards;
+}
+
+.accountancy-container .consultations .list-consultations .more-element .more-menu div{
+	cursor: pointer;
+	margin-bottom: 15px;
+}
+
+.accountancy-container .consultations .list-consultations .more-element .more-overlay{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index:1000;
+}
+
+.accountancy-container .consultations .list-consultations .divider{
+	margin:20px;
+	height: 1px;
+	background-color: #ececec;
+}
+
+.accountancy-container .consultations .animated-background{
+	height: 190px;
+}
+
+.accountancy-container .consultations .animated-background .first{
+	width: 70%;
+	left:30%;
+}
+
+.accountancy-container .consultations .animated-background .second{
+	width: 100%;
+	top:20px;
+}
+
+.accountancy-container .consultations .animated-background .third{
+	height: 30px;
+	width: 2%;
+	top:40px;
+	left:32%;
+}
+
+.accountancy-container .consultations .animated-background .fourth{
+	height: 30px;
+	width: 2%;
+	top:40px;
+	left:66%;
+}
+
+.accountancy-container .consultations .animated-background .fifth{
+	width: 100%;
+	top:70px;
+}
+
+.accountancy-container .consultations .animated-background .sixth{
+	width: 50%;
+	top:90px;
+	left:50%;
+}
+
+.accountancy-container .consultations .animated-background .seventh{
+	width: 100%;
+	top:110px;
+}
+
+.accountancy-container .consultations .animated-background .eighth{
+	width: 40%;
+	top:130px;
+	left:60%;
+}
+
+.accountancy-container .consultations .animated-background .nineth{
+	width: 100%;
+	top:150px;
+}
+
+.accountancy-container .consultations .animated-background .tenth{
+	width: 55%;
+	top:170px;
+	left:45%;
+}
+
+.accountancy-container .title-details.animated-background{
+	width: 20%;
+	height: 20px;
+	min-width: 150px;
+}
+
+@media screen and (max-width:700px){
+	.accountancy-container .chart-container .info{
+		flex-direction: column-reverse;
+	}
+
+	.accountancy-container .chart-container .info .chart .bar-wrapper{
+		height: 150px;
+	}
+
+	.accountancy-container .chart-container .info .divider{
+		width: auto;
+		height: 1px;
+	}
+
+	.accountancy-container .chart-container .info .income{
+		align-items: center;
+	}
+	
+	.accountancy-container .details-header{
+		grid-template-columns: repeat(1,1fr);
+		column-gap: 0;
+		margin-bottom: 0;
+		row-gap:10px;
+	}
+
+	.accountancy-container .details-header .fee-wrapper{
+		margin-bottom: 25px;
+	}
+}
+
+@media screen and (max-width: 600px){
+	.accountancy-container .consultations .checkboxes .flexboxes{
+		flex-direction: column;
+		flex-wrap:nowrap;
+	}
+
+	.accountancy-container .consultations .checkboxes .checkbox:not(:last-child){
+		margin-bottom: 5px;
+	}
+
+	.accountancy-container .consultations .checkboxes.show{
+		max-height: 120px;
+	}
+}

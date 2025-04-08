@@ -1,0 +1,18 @@
+<div class="modal-container">
+	<ng-container *ngIf="loading; else show">
+		<div class="waiter">
+			<mat-spinner [diameter]="80"></mat-spinner>
+		</div>
+	</ng-container>
+	<ng-template #show>
+		<ng-container *ngIf="error; else noError">
+			<div class="error">
+				Impossible d'afficher ce document
+			</div>
+		</ng-container>
+		<ng-template #noError>
+			<ng-container *ngIf="type.startsWith('image/')"><img [src]="url"></ng-container>
+			<ng-container *ngIf="type === 'application/pdf'"><object *ngIf="url" [data]="url | safe"></object></ng-container>
+		</ng-template>
+	</ng-template>
+</div>

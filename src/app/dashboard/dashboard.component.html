@@ -1,0 +1,109 @@
+<div [style.--color]="patientService.mainColors[patientService.user.color]" [style.--sup-color]="patientService.supColors[patientService.user.color]" [style.--fade-color]="patientService.svgColors[patientService.user.color]" [style.--text-color]="patientService.textColors[patientService.user.color]" class="dashboard-container container">
+	<div class="container-title">
+		<div class="title-text title-element">
+			Tableau de bord
+		</div>
+		<ng-container *ngIf="!edit">
+			<div class="button" (click)="configureWidgets()">Arranger</div>
+		</ng-container>
+		<ng-container *ngIf="edit">
+			<div class="buttons">
+				<div class="button" [ngClass]="{disabled:loading}" (click)="saveWidgets()">Valider</div>
+				<div class="button" [ngClass]="{disabled:loading}" (click)="cancel()">Annuler</div>
+			</div>
+		</ng-container>
+	</div>
+	<div class="date panel">
+		<div class="day title-element">
+			{{today | date : 'd MMMM yyyy'}}
+		</div>
+		<div class="clock-element">
+			<div class="clock">
+				<div class="hour" [style.--percent-hour]="(hour*3600+minute*60+second) | percent : 43200"></div>
+				<div class="minute" [style.--percent-minute]="(minute*60+second) | percent : 3600"></div>
+			</div>
+		</div>
+		<div class="hour title-element">
+			{{shownHour}}:{{minute < 10 ? '0' + minute.toString() : minute}}
+		</div>
+	</div>
+	<div class="widgets" cdkDropListGroup>
+		<div cdkDropList (cdkDropListDropped)="dropListDropped()" (cdkDropListEntered)="cdkDropListEntered($event)"></div>
+		<div cdkDropList *ngFor="let widget of widgets;let i = index" [ngClass]="{'inactive':!widget.active,'edit':edit,'odd':!widget.active && i%2!==0}" (cdkDropListDropped)="dropListDropped()" (cdkDropListEntered)="cdkDropListEntered($event)">
+			<div cdkDrag [cdkDragDisabled]="!edit || loading" class="widget panel">
+				<div *ngIf="edit" cdkDragHandle class="drag-layout">
+					<div class="background"></div>
+					<mat-icon class="visibility" *ngIf="widget.active" (click)="toggleActive(i)">visibility</mat-icon>
+					<mat-icon class="visibility" *ngIf="!widget.active" (click)="toggleActive(i)">visibility_off</mat-icon>
+					<mat-icon class="drag-indicator">drag_indicator</mat-icon>
+				</div>
+				<ng-container *ngIf="widget.id === -1">
+					<div class="title-text sub-title-element">
+						Mes fiches et consultations
+					</div>
+					<div class="content">
+						<div class="items">
+							<div class="item">
+								Nombre total<br>
+								<b class="sub-title-element records">{{totalRecords}} fiche/s</b><br>
+								<b class="sub-title-element consultations">{{totalConsultations}} consultation/s</b>
+							</div>
+							<div class="item">
+								Ce mois-ci<br>
+								<b class="sub-title-element records">{{monthRecords}} fiche/s</b><br>
+								<b class="sub-title-element consultations">{{monthConsultations}} consultation/s</b>
+							</div>
+						</div>
+						<table class="area-chart">
+							<tbody>
+								<tr *ngFor="let consult of allConsultations; let i = index">
+									<td [style.--start]="consult[0].value | percent : recordsConsultationsMax" [style.--end]="consult[1].value | percent : recordsConsultationsMax"></td>
+									<td [style.--start]="allRecords[i][0].value | percent : recordsConsultationsMax" [style.--end]="allRecords[i][1].value | percent : recordsConsultationsMax"></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="months">
+							<div class="month semi" *ngFor="let month of monthNames">
+								<div>{{month}}</div>
+							</div>
+						</div>
+						<div class="months mini">
+							<div class="month" *ngFor="let month of monthNamesMini">
+								<div>{{month}}</div>
+							</div>
+						</div>
+					</div>
+					<div class="buttons">
+						<div class="button" (click)="newRecord()">Nouvelle fiche</div>
+						<div class="button" (click)="list()">Liste</div>
+					</div>
+				</ng-container>
+				<ng-container *ngIf="widget.id === 1">
+					<div class="title-text sub-title-element">
+						Ma comptabilité
+					</div>
+					<div class="content">
+						<div class="items">
+							<div class="item">
+								CA annuel<br>
+								<b class="sub-title-element">{{totalTurnover}}</b>
+							</div>
+							<div class="item">
+								CA du mois<br>
+								<b class="sub-title-element">{{monthTurnover}}</b>
+							</div>
+						</div>
+						<div class="chart">
+							<div class="bar-wrapper" *ngFor="let month of allMonths">
+								<div class="bar" [style.height.%]="month.value | percent : yearMax"></div>
+							</div>
+							<div class="month semi" *ngFor="let month of monthNames">{{month}}</div>
+							<div class="month mini" *ngFor="let month of monthNamesMini">{{month}}</div>
+						</div>
+					</div>
+					<div class="button" (click)="account()">Accéder à ma comptabilité</div>
+				</ng-container>
+			</div>
+		</div>
+	</div>
+</div>

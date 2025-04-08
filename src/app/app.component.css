@@ -1,0 +1,60 @@
+.demo-watermark{
+	position:fixed;
+	top:5px;
+	left:5px;
+	opacity:0.5;
+	z-index:99;
+	color:black;
+}
+
+.menu-header{
+	flex: 1;
+}
+
+.flex-page{
+	overflow-x: hidden;
+	position: relative;
+	z-index: 0;
+	display: flex;
+	height: 100vh;
+	width: 100vw;
+	flex-direction: row;
+	min-height: 600px;
+	background-color: #F9F9F9;
+}
+
+.main{
+	flex:50;
+	position:relative;
+	overflow:auto;
+}
+
+.left-main-svg{
+	position: absolute;
+	bottom:0;
+	left:0;
+	z-index:-10;
+}
+
+.right-main-svg{
+	position: absolute;
+	top: 20%;
+	right: 10%;
+	z-index: -10;
+}
+
+@media screen and (max-width: 1000px){
+	.flex-page{
+		flex-direction: column-reverse;
+	}
+
+	.menu-header{
+		padding:0;
+		line-height: initial;
+	}
+
+	.menu-header:after{
+		height:0;
+		width:0;
+	}
+}
