@@ -2,7 +2,7 @@
   "name": "Gstionnaire",
   "productName": "Gstionnaire",
   "description": "Description gstionnaire",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "Alexis de Corbier"
   },
@@ -22,7 +22,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make --arch=x64 --platform=darwin",
     "make:skip": "electron-forge make --skip-package",
-    "publish": "electron-forge publish"
+    "publish": "electron-forge publish",
+    "produce": "ng build --configuration production && electron-forge publish"
   },
   "main": "main.js",
   "private": true,
